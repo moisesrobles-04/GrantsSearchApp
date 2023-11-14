@@ -16,46 +16,80 @@ link = "https://www.grants.gov/search-grants"
 # length of 6
 
 def lista1():
-    with webdriver.Safari() as driver:
+    with webdriver.Chrome() as driver:
         grant = []
+        titles_list = []
         driver.get(link)
-        wait = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table")))
+        wait = WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table")))
+        time.sleep(2)
         page_length = driver.find_element(By.XPATH,
                                           "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/thead/tr[1]/th/nav/ul/li[6]/a").text
         titles = driver.find_elements(By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/thead/tr[2]/th")
         cell = driver.find_elements(By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tbody/tr/td")
         for i in titles:
-            grant.append(i.text)
+            if i.text == '':
+                att = i.get_attribute("innerHTML").split(" <")
+                titles_list.append(att[0])
+            else:
+                titles_list.append(i.text)
 
-        grant.append("Instrument Type")
-        grant.append("Category")
-        grant.append("Matching")
-        grant.append("Award Ceiling")
-        grant.append("Award Floor")
+        titles_list.append("Instrument Type")
+        titles_list.append("Category")
+        titles_list.append("Matching")
+        titles_list.append("Award Ceiling")
+        titles_list.append("Award Floor")
+        grant.append(titles_list)
 
-        for i in range(0, int(page_length)):
+        size = int(page_length)
+        # size = 1
+
+        for i in range(0, size):
+            #skip pages
+            # if i<93:
+            #     if i == 0:
+            #         next = driver.find_element(By.XPATH,
+            #                                "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tfoot/tr/td/nav/ul/li[2]/a")
+            #     elif i == 1:
+            #         next = driver.find_element(By.XPATH,
+            #                                "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tfoot/tr/td/nav/ul/li[4]/a")
+            #     elif i == 2:
+            #         next = driver.find_element(By.XPATH,
+            #                                "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tfoot/tr/td/nav/ul/li[5]/a")
+            #     else:
+            #         next = driver.find_element(By.XPATH,
+            #                                "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tfoot/tr/td/nav/ul/li[6]/a")
+            #
+            #     next.send_keys(Keys.ENTER)
+            #     time.sleep(0.5)
+            #     continue
+
             index = 1
             count = 1
-            temp = []
+            temporary = []
             for element in cell:
                 try:
+                    if count < 6:
+                        temporary.append(element.text)
 
-                    if count == 6 and element.text == "":
-                        grant.append("2099-01-01")
-                        temp.append("2099-01-01")
                     else:
-                        grant.append(element.text)
-                        temp.append(element.text)
+                        att = element.get_attribute("innerHTML").split("<")
+                        att = att[1].split(">")
+                        if att[1] == "no data":
+                            temporary.append("2099-01-01")
+                        else:
+                          temporary.append(att[1])
 
-                    if count == 6:
-                        send = driver.find_element(By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tbody/tr["
-                                               + str(index) + "]/td[1]/a")
+                        send = driver.find_element(By.XPATH,
+                                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tbody/tr["
+                                                   + str(index) + "]/td[1]/a")
                         send.send_keys(Keys.ENTER)
 
                         wait = WebDriverWait(driver, 30).until(
                             EC.presence_of_element_located((By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[3]")))
+                        time.sleep(1)
 
-                        if temp.count("Forecasted") == 1:
+                        if temporary.count("Forecasted") == 1:
                             instrument = driver.find_element(By.XPATH,
                                                              "//*[@id='opportunity-container']/div/div[2]/div/div[1]/table/tbody/tr[6]/td[1]")
                             cat = driver.find_element(By.XPATH,
@@ -88,22 +122,26 @@ def lista1():
                         else:
                             floor = 0
 
-                        grant.append(instrument.text)
-                        grant.append(cat.text)
-                        grant.append(match.text)
-                        grant.append(ceiling)
-                        grant.append(floor)
+                        temporary.append(instrument.text)
+                        temporary.append(cat.text)
+                        temporary.append(match.text)
+                        temporary.append(ceiling)
+                        temporary.append(floor)
 
                         driver.back()
                         time.sleep(1)
 
                         index += 1
                         count = 0
-                        temp.clear()
+                        if "UTF-8" in str(temporary) or "NHGRI" in str(temporary) or "RADx" in str(temporary):
+                            print("Eliminated")
+                        else:
+                            grant.append(temporary.copy())
+                        temporary.clear()
 
 
                 except:
-                    print("Failed in page: " + str(i+1))
+                    print("Failed in page: " + str(i + 1))
                     print("Failed element number: " + str(index))
                     return grant
 
@@ -134,42 +172,11 @@ def aux_str(money):
     res = result.replace(",", "")
     return res
 
+
 if __name__ == "__main__":
-    with open("grants.csv", "w") as funds:
+    with open("New_grants.csv", "a") as funds:
         writer = csv.writer(funds)
         result = lista1()
-        for i in range(0, len(result) - 10, 11):
-            temp = [result[i], result[i + 1], result[i + 2], result[i + 3], result[i + 4], result[i + 5], result[i + 6],
-                    result[i + 7], result[i + 8], result[i + 9], result[i + 10]]
-            writer.writerow(temp)
+        writer.writerows(result)
+        print("Finished")
         funds.close()
-
-# with open("locations.csv", "r") as locations:
-#     reader = csv.reader(locations)
-#     header = next(reader)
-#     for i in reader:
-#         temp.append(i)
-#
-#     wb = Workbook("json.xlsx")
-#     ws = wb.add_worksheet("New Sheet")
-#     first_row= 0
-#     result = lista1(temp)
-#     order_list = ["id","type","name","name_en","area","phone","fax","hours_weekly_range","hours","event","address","city","lat","lng","distance","features"]
-#     for header in order_list:
-#         col = order_list .index(header)
-#         ws.write(first_row, col, header)
-#
-#     row = 1
-#
-#     for jsonfiles in result:
-#         for _key, _values in jsonfiles.items():
-#             if(_key=='hours' or _key=='event' or _key=='features'):
-#                 col = order_list.index(_key)
-#                 ws.write(row, col, str(_values))
-#             else:
-#                 col=order_list.index(_key)
-#                 ws.write(row, col, _values)
-#         row+=1
-#     print(len(result))
-#     wb.close()
-#     locations.close()
