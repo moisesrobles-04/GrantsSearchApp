@@ -12,7 +12,15 @@ class npoDAO():
             query = """Select * From NPO"""
             cur.execute(query)
             user_list = [row for row in cur]
-            print(user_list)
+            return user_list
+
+    def getNPO_byName(self, names):
+            cur = self.db.connection.cursor()
+            query = """Select * From NPO where name =? """
+            ex = (names,)
+            cur.execute(query,ex)
+            user_list = cur.fetchone()
+            return user_list
     # def create_npo(self, name):
 
 

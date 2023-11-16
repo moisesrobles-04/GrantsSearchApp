@@ -6,6 +6,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
+from model.npo import npoDAO
 
 class MyGridLayout(GridLayout):
     #Initialize infinite keywords
@@ -17,7 +18,7 @@ class MyGridLayout(GridLayout):
 
         #Create second gridlayout
         self.top_grid = GridLayout()
-        self.top_grid.cols = 2
+        self.top_grid.cols = 3
 
 
         #Add widgets
@@ -26,33 +27,38 @@ class MyGridLayout(GridLayout):
         self.name = TextInput(multiline =False)
         self.top_grid.add_widget(self.name)
 
+        #Create a submit Button
+        self.submit = Button(text = "Search specific NPO", font_size = 32)
+        self.submit.bind(on_press=self.press_npos)
+        self.top_grid.add_widget(self.submit)
+
         #Add top grid to grid
         self.add_widget(self.top_grid)
 
 
         #Create a submit Button
-        self.submit = Button(text = "Submit", font_size = 32)
-        self.submit.bind(on_press=self.press)
+        self.submit = Button(text = "Search NPOs", font_size = 32)
+        self.submit.bind(on_press=self.press_all_npos)
         self.add_widget(self.submit)
 
-    def press(self, instance):
-        test = []
-        name = self.name.text
-        with open("./data/Total grants.csv", "r", encoding= "utf8") as file:
-            reader = csv.reader(file)
-            debug = False
-            for i in reader:
-                test.append(i)
-                if debug:
-                    break
-                debug = True
-            # print(f'This grant data is: \n {test[1]}')
-            file.close()
 
-        self.add_widget(Label(text=f'This grant data is: \n {test[1]}'))
+    def press_npos(self, instance):
+        name = self.name.text
+        dao = npoDAO().getNPO_byName(name)
+        self.label = Label(text=f'The NPO {dao} exists', size_hint=(1.0, 1.0), halign="left", valign= "middle")
+        self.label.bind(size=self.label.setter('text_size'))
+        self.add_widget(self.label)
 
         #Clear box
         self.name.text = ""
+
+    #Search for all NPOs
+    def press_all_npos(self, instance):
+        dao = npoDAO().getNPO()
+        for i in dao:
+            self.label = Label(text=f'The NPO #{i[0]} is {i[1]}', size_hint=(1.0, 1.0), halign="left", valign= "middle")
+            self.label.bind(size=self.label.setter('text_size'))
+            self.add_widget(self.label)
 
 class GrantsApp(App):
     def build(self):
