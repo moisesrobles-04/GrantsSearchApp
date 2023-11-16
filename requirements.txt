@@ -1,0 +1,14 @@
+brotlipy==0.7.0
+distlib==0.3.7
+docutils==0.20.1
+filelock==3.13.1
+Kivy==2.2.1
+kivy-deps.angle==0.3.3
+kivy-deps.glew==0.3.1
+kivy-deps.sdl2==0.6.0
+Kivy-Garden==0.1.5
+Pillow==10.1.0
+platformdirs==3.11.0
+Pygments==2.16.1
+virtualenv==20.24.6
+zstandard==0.19.0
