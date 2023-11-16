@@ -174,7 +174,7 @@ def aux_str(money):
 
 
 if __name__ == "__main__":
-    with open("New_grants.csv", "a") as funds:
+    with open("test.csv", "w") as funds:
         writer = csv.writer(funds)
         result = lista1()
         writer.writerows(result)
