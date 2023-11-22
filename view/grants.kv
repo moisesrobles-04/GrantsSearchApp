@@ -1,3 +1,7 @@
+WindowManager:
+    NpoWindow:
+    CategoryWindow:
+
 <Button>
     font_size: 28
     background_normal: ''
@@ -6,7 +10,8 @@
 <Label>
     font_size: 20
 
-<MyLayout>
+<NpoWindow>:
+    name: "first"
 
     BoxLayout:
         orientation: "vertical"
@@ -26,12 +31,15 @@
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
+                background_color: (0, 0, 1, 1)
                 text: "NPOs"
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
                 text: "Categories"
-                on_press: root.press_categories()
+                on_press:
+                    app.root.current = "second"
+                    root.manager.transition.direction = "left"
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
@@ -47,6 +55,7 @@
 
             Label:
                 id: name_labels
+                text: "Which NPO are you looking for?"
                 text_size: self.width, None
 
             TextInput:
@@ -71,3 +80,63 @@
                     #Rectangle:
                         #size: self.size
                         #pos: self.pos
+
+<CategoryWindow>:
+    name: "second"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        padding: 50
+        spacing: 20
+
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "NPOs"
+                on_release:
+                    app.root.current = "first"
+                    root.manager.transition.direction = "right"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (0, 0, 1, 1)
+                text: "Categories"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Grants"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Hello"
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Label:
+                id: name_labels
+                text: "Which Categories are you looking for?"
+                text_size: self.width, None
+
+            TextInput:
+                id: name_input
+                multiline: False
+
+            Button:
+                text: "Search for a category"
+                on_press: root.press_category()
+
+        Button:
+            text: "Search for all categories"
+            on_press: root.press_all_categories()

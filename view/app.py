@@ -2,18 +2,14 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.core.window import Window
+from kivy.uix.screenmanager import Screen, ScreenManager
+
 import csv
 from controller.npo_controller import npoController
 from controller.categories_controller import categoryController
 
-Builder.load_file('grants.kv')
-Window.size = (700,700)
-
-class MyLayout(Widget):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.ids.name_labels.text = "Which NPO are you looking for?"
-
+#Defined our different Windows
+class NpoWindow(Screen):
     def press_npo(self):
         name = self.ids.name_input.text
         if name != "":
@@ -32,7 +28,18 @@ class MyLayout(Widget):
 
         self.ids.name_labels.text = text
 
-    def press_categories(self):
+class CategoryWindow(Screen):
+    def press_category(self):
+        name = self.ids.name_input.text
+        if name != "":
+            cat = categoryController().get_category_by_name(name)
+            if cat["c_id"] ==-1:
+                self.ids.name_labels.text = cat["category"]
+            else:
+                self.ids.name_labels.text = f'The #{cat["c_id"]} Category is {cat["category"]}'
+            self.ids.name_input.text = ""
+
+    def press_all_categories(self):
         c_list = categoryController().get_all_categories()
         text = "The Categories are:"
         for i in c_list:
@@ -40,11 +47,16 @@ class MyLayout(Widget):
 
         self.ids.name_labels.text = text
 
-
+class WindowManager(ScreenManager):
+    pass
 
 class GrantsApp(App):
     def build(self):
-        return MyLayout()
+        return kv
+
+
+kv = Builder.load_file('grants.kv')
+Window.size = (700,700)
 
 if __name__ == '__main__':
     GrantsApp().run()
