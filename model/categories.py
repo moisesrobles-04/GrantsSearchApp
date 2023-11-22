@@ -13,7 +13,7 @@ class categoryDAO():
                     returning c_id"""
             ex = (category,)
             cur.execute(query, ex)
-            result = cur.fetchone()
+            result = cur.fetchone()[0]
             cur.close()
             self.db.connection.commit()
 
@@ -80,7 +80,7 @@ class categoryDAO():
     def getCategoriesbyName(self, category):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From categories where category = ?"""
+            query = """Select * From categories where category = ? COLLATE NOCASE"""
             ex = (category,)
             cur.execute(query, ex)
 

@@ -2,56 +2,55 @@ from model.db import Database
 import sqlite3
 
 
-class npoDAO():
+class npocatDAO():
 
     def __init__(self):
         self.db = Database()
 
-    def createNPO(self, name):
+    def createNPOCat(self, n_id, c_id):
         try:
             cur = self.db.connection.cursor()
-            query = """Insert into NPO (name) values (?)
-                    returning n_id"""
-            ex = (name,)
+            query = """Insert into npocategory (n_id, c_id) values (?, ?)"""
+            ex = (n_id, c_id)
             cur.execute(query, ex)
             result = cur.fetchone()[0]
             cur.close()
             self.db.connection.commit()
 
         except(Exception, sqlite3.Error) as error:
-            print("Error executing createNPO operation", error)
+            print("Error executing createNPOCat operation", error)
             self.db.connection = None
         finally:
             if self.db.connection is not None:
                 self.db.close()
                 return result
 
-    def updateNPO(self, n_id, name):
+    def updateNPOCat(self, n_id, c_id):
         try:
             cur = self.db.connection.cursor()
-            query = """Update NPO (name) set name = ?
+            query = """Update npocategory (n_id, c_id) set c_id = ?
                         where n_id = ?"""
-            ex = (name, n_id)
+            ex = (c_id, n_id)
             cur.execute(query, ex)
             cur.close()
             self.db.connection.commit()
 
         except(Exception, sqlite3.Error) as error:
-            print("Error executing updateNPO operation", error)
+            print("Error executing updateNPOCat operation", error)
             self.db.connection = None
 
         finally:
             if self.db.connection is not None:
                 self.db.close()
 
-    def getNPO(self):
+    def getNPOCat(self):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From NPO"""
+            query = """Select * From npocategory"""
             cur.execute(query)
 
         except(Exception, sqlite3.Error) as error:
-            print("Error executing getNPO operation", error)
+            print("Error executing getNPOCat operation", error)
             self.db.connection = None
 
         finally:
@@ -61,15 +60,15 @@ class npoDAO():
                 self.db.close()
                 return result
 
-    def getNPO_byId(self, n_id):
+    def getNPOCat_byNpoId(self, n_id):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From NPO where n_id =? """
+            query = """Select * From npocategory where n_id =? """
             ex = (n_id,)
             cur.execute(query, ex)
 
         except(Exception, sqlite3.Error) as error:
-            print("Error executing getNPO_byId operation", error)
+            print("Error executing getNPOCat_byNpoId operation", error)
             self.db.connection = None
 
         finally:
@@ -80,15 +79,33 @@ class npoDAO():
                 return result
 
 
-    def getNPO_byName(self, name):
+    def getNPOCat_byCatId(self, c_id):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From NPO where name =? COLLATE NOCASE"""
-            ex = (name,)
+            query = """Select * From npocategory where c_id = ?"""
+            ex = (c_id,)
             cur.execute(query, ex)
 
         except(Exception, sqlite3.Error) as error:
-            print("Error executing getNPO_byName operation", error)
+            print("Error executing getNPOCat_byCatId operation", error)
+            self.db.connection = None
+
+        finally:
+            if self.db.connection is not None:
+                result = cur.fetchone()
+                cur.close()
+                self.db.close()
+                return result
+
+    def getNPOCat_byId(self, n_id, c_id):
+        try:
+            cur = self.db.connection.cursor()
+            query = """Select * From npocategory where n_id = ? and c_id = ?"""
+            ex = (n_id, c_id)
+            cur.execute(query, ex)
+
+        except(Exception, sqlite3.Error) as error:
+            print("Error executing getNPOCat_byId operation", error)
             self.db.connection = None
 
         finally:
