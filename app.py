@@ -6,7 +6,9 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
+
 from controller.npo_controller import npoController
+from controller.categories_controller import categoryController
 
 class MyGridLayout(GridLayout):
     #Initialize infinite keywords
@@ -38,7 +40,7 @@ class MyGridLayout(GridLayout):
 
         #Create a submit Button
         self.submit = Button(text = "Search NPOs", font_size = 32)
-        self.submit.bind(on_press=self.press_all_npos)
+        self.submit.bind(on_press=self.press_all_cat)
         self.add_widget(self.submit)
 
 
@@ -53,11 +55,19 @@ class MyGridLayout(GridLayout):
         #Clear box
         self.name.text = ""
 
-    #Search for all NPOs
-    def press_all_npos(self, instance):
-        handler = npoController().get_all_npos()
+    # #Search for all NPOs
+    # def press_all_npos(self, instance):
+    #     handler = npoController().get_all_npos()
+    #     for i in handler:
+    #         self.label = Label(text=f'The NPO #{i.get("n_id")} is {i.get("name")}', size_hint=(1.0, 1.0), halign="left", valign= "middle")
+    #         self.label.bind(size=self.label.setter('text_size'))
+    #         self.add_widget(self.label)
+
+    #Search for all Categories
+    def press_all_cat(self, instance):
+        handler = categoryController().get_all_categories()
         for i in handler:
-            self.label = Label(text=f'The NPO #{i.get("n_id")} is {i.get("name")}', size_hint=(1.0, 1.0), halign="left", valign= "middle")
+            self.label = Label(text=f'The category #{i.get("c_id")} is {i.get("category")}', size_hint=(1.0, 1.0), halign="left", valign= "middle")
             self.label.bind(size=self.label.setter('text_size'))
             self.add_widget(self.label)
 

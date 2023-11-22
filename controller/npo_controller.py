@@ -37,24 +37,6 @@ class npoController:
 
         return self.build_npo_map_dict(npo)
 
-
-    """
-    =====================
-           CREATE      
-    =====================
-    """
-
-    def create_npo(self, json):
-        dao = npoDAO()
-        npo_exist = dao.getNPO_byName(json["name"])
-        if npo_exist != None:
-            return self.build_npo_map_dict([-1, "NPO already exists"])
-        dao = npoDAO()
-        n_id = dao.createNPO(json["name"])
-        npo= [n_id, json["name"]]
-        npo_dict = self.build_npo_map_dict(npo)
-        return npo_dict
-
     """
     =====================
            CREATE      
@@ -86,6 +68,6 @@ class npoController:
             return self.build_npo_map_dict([-1, f"NPO {npo_exist[1]} does not exist"])
         dao = npoDAO()
         npo= [json["n_id"], json["name"]]
-        dao.updateNPO(npo)
+        dao.updateNPO(npo[0], npo[1])
         npo_dict = self.build_npo_map_dict(npo)
         return npo_dict
