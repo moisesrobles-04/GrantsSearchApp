@@ -1,0 +1,23 @@
+<MyGridLayout>
+    name:name
+
+    GridLayout:
+        cols:1
+        size: root.width, root.height
+
+        GridLayout:
+            cols:3
+
+            Label:
+                text: "NPO Name"
+            TextInput:
+                id: name
+                multiline:False
+
+            Button:
+                text: "Search NPO"
+                font_size: 32
+                on_press: root.press()
+        Button:
+            text: "Search all NPOs"
+            font_size: 32
