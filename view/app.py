@@ -1,31 +1,50 @@
-import csv
-
 from kivy.app import App
 from kivy.uix.widget import Widget
-from kivy.uix.label import Label
-from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.textinput import TextInput
-from kivy.properties import ObjectProperty
-
+from kivy.lang import Builder
+from kivy.core.window import Window
+import csv
 from controller.npo_controller import npoController
 from controller.categories_controller import categoryController
 
-class MyGridLayout(Widget):
+Builder.load_file('grants.kv')
+Window.size = (700,700)
 
-    name = ObjectProperty(None)
+class MyLayout(Widget):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.ids.name_labels.text = "Which NPO are you looking for?"
 
-    def press(self):
-        name= self.name.text
+    def press_npo(self):
+        name = self.ids.name_input.text
+        if name != "":
+            npo = npoController().get_npo_by_name(name)
+            if npo["n_id"] ==-1:
+                self.ids.name_labels.text = npo["name"]
+            else:
+                self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
+            self.ids.name_input.text = ""
 
-        # self.add_widget(Label(text=f'Hello {name} this is a test'))
-        print(f'Hello {name} this is a test')
-        self.name.text= ""
+    def press_all_npos(self):
+        n_list = npoController().get_all_npos()
+        text = "The NPOs are:"
+        for i in n_list:
+            text += f'{i["name"]}, '
+
+        self.ids.name_labels.text = text
+
+    def press_categories(self):
+        c_list = categoryController().get_all_categories()
+        text = "The Categories are:"
+        for i in c_list:
+            text += f'{i["category"]}, '
+
+        self.ids.name_labels.text = text
+
 
 
 class GrantsApp(App):
     def build(self):
-        return MyGridLayout()
+        return MyLayout()
 
 if __name__ == '__main__':
     GrantsApp().run()

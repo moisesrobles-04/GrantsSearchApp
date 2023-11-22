@@ -1,23 +1,73 @@
-<MyGridLayout>
-    name:name
+<Button>
+    font_size: 28
+    background_normal: ''
+    background_color: (0,1,0,1)
 
-    GridLayout:
-        cols:1
+<Label>
+    font_size: 20
+
+<MyLayout>
+
+    BoxLayout:
+        orientation: "vertical"
         size: root.width, root.height
 
-        GridLayout:
-            cols:3
+        padding: 50
+        spacing: 20
 
-            Label:
-                text: "NPO Name"
-            TextInput:
-                id: name
-                multiline:False
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
 
             Button:
-                text: "Search NPO"
-                font_size: 32
-                on_press: root.press()
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "NPOs"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Categories"
+                on_press: root.press_categories()
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Grants"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Hello"
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Label:
+                id: name_labels
+                text_size: self.width, None
+
+            TextInput:
+                id: name_input
+                multiline: False
+
+            Button:
+                text: "Search for a NPO"
+                on_press: root.press_npo()
+
         Button:
-            text: "Search all NPOs"
-            font_size: 32
+            text: "Search for all NPOs"
+            on_press: root.press_all_npos()
+
+
+            #Label:
+                #text: "Search for a NPO"
+                #background_color: (0, 0, 1, 1)
+                #canvas.before:
+                    #Color:
+                        #rgba: self.background_color
+                    #Rectangle:
+                        #size: self.size
+                        #pos: self.pos
