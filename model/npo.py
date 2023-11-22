@@ -14,16 +14,15 @@ class npoDAO():
                     returning n_id"""
             ex = (name,)
             cur.execute(query, ex)
+            result = cur.fetchone()
+            cur.close()
             self.db.connection.commit()
 
         except(Exception, sqlite3.Error) as error:
             print("Error executing createNPO operation", error)
             self.db.connection = None
-
         finally:
             if self.db.connection is not None:
-                result = cur.fetchone()
-                cur.close()
                 self.db.close()
                 return result
 
@@ -34,6 +33,7 @@ class npoDAO():
                         where n_id = ?"""
             ex = (name, n_id)
             cur.execute(query, ex)
+            cur.close()
             self.db.connection.commit()
 
         except(Exception, sqlite3.Error) as error:
@@ -42,7 +42,6 @@ class npoDAO():
 
         finally:
             if self.db.connection is not None:
-                cur.close()
                 self.db.close()
 
     def getNPO(self):
@@ -84,7 +83,7 @@ class npoDAO():
     def getNPO_byName(self, name):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From NPO where name =? """
+            query = """Select * From NPO where name =? COLLATE NOCASE"""
             ex = (name,)
             cur.execute(query, ex)
 

@@ -44,7 +44,8 @@ class MyGridLayout(GridLayout):
 
     def press_npos(self, instance):
         name = self.name.text
-        dao = npoController().get_npo_by_name(name)
+        dict = {"name": name}
+        dao = npoController().create_npo(dict)
         self.label = Label(text=f'The NPO {dao.get("name")} exists', size_hint=(1.0, 1.0), halign="left", valign= "middle")
         self.label.bind(size=self.label.setter('text_size'))
         self.add_widget(self.label)
