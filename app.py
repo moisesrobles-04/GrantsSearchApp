@@ -6,7 +6,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
-from model.npo import npoDAO
+from controller.npo_controller import npoController
 
 class MyGridLayout(GridLayout):
     #Initialize infinite keywords
@@ -44,8 +44,8 @@ class MyGridLayout(GridLayout):
 
     def press_npos(self, instance):
         name = self.name.text
-        dao = npoDAO().getNPO_byName(name)
-        self.label = Label(text=f'The NPO {dao} exists', size_hint=(1.0, 1.0), halign="left", valign= "middle")
+        dao = npoController().get_npo_by_name(name)
+        self.label = Label(text=f'The NPO {dao.get("name")} exists', size_hint=(1.0, 1.0), halign="left", valign= "middle")
         self.label.bind(size=self.label.setter('text_size'))
         self.add_widget(self.label)
 
@@ -54,9 +54,9 @@ class MyGridLayout(GridLayout):
 
     #Search for all NPOs
     def press_all_npos(self, instance):
-        dao = npoDAO().getNPO()
-        for i in dao:
-            self.label = Label(text=f'The NPO #{i[0]} is {i[1]}', size_hint=(1.0, 1.0), halign="left", valign= "middle")
+        handler = npoController().get_all_npos()
+        for i in handler:
+            self.label = Label(text=f'The NPO #{i.get("n_id")} is {i.get("name")}', size_hint=(1.0, 1.0), halign="left", valign= "middle")
             self.label.bind(size=self.label.setter('text_size'))
             self.add_widget(self.label)
 
