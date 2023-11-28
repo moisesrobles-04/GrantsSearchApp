@@ -47,7 +47,7 @@ class npoDAO():
     def getNPO(self):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From NPO"""
+            query = """Select * From NPO order by name"""
             cur.execute(query)
 
         except(Exception, sqlite3.Error) as error:

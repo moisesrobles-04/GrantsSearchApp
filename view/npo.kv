@@ -1,13 +1,28 @@
 <Button>
     font_size: 32
     background_normal: ''
+    color: 0, 0.75, 0, 1
+    halign: "center"
     #background_color: (0,0.75,0,1)
 
 <Label>
     font_size: 28
 
-<CategoryWindow>:
-    name: "second"
+<GridLayout>
+    spacing: 15
+    canvas.before:
+        Color:
+            rgba: 0,0.75,0,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<SpinnerOption>:
+    font_size: 18
+    text_size: self.width, None
+
+<NpoWindow>:
+    name: "first"
 
     BoxLayout:
         orientation: "vertical"
@@ -27,15 +42,86 @@
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
+                background_color: (0, 0, 1, 1)
                 text: "NPOs"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Categories"
+                on_press:
+                    app.root.current = "second"
+                    root.manager.transition.direction = "up"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Grants"
                 on_release:
-                    app.root.current = "first"
-                    root.manager.transition.direction = "right"
+                    root.manager.transition.direction = "up"
+                    app.root.current = "third"
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Hello"
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Button:
+                id: search_npo_label
+                text: "Search NPOs"
+                text_size: self.width, None
+                on_press:
+                    app.root.current = "first_one"
+
+            Button:
+                id: add_npo_label
+                text: "Add NPO"
+                text_size: self.width, None
+
+            Button:
+                id: remove_npo_label
+                text: "Remove NPO"
+                text_size: self.width, None
+
+
+        Label:
+            height: 20
+
+
+<NpoSearchWindow>:
+    name: "first_one"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        padding: 50
+        spacing: 20
+
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
                 background_color: (0, 0, 1, 1)
+                text: "Back"
+                on_press:
+                    app.root.current = "first"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
                 text: "Categories"
+                on_press:
+                    app.root.current = "second"
+                    root.manager.transition.direction = "left"
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
@@ -54,90 +140,21 @@
 
             Label:
                 id: name_labels
-                text: "Which Categories are you looking for?"
+                text: "Which NPO are you looking for?"
                 text_size: self.width, None
 
-            TextInput:
-                id: name_input
-                multiline: False
+            Spinner:
+                id: NPO_dropdown
+                text: "Select NPOs"
+                values: root.dropdown()
+                text_size: self.width, None
+                #on_text: root.spinner_clicked(spinner_id.text)
 
             Button:
-                text: "Search for a category"
+                text: "Search for a NPO"
                 text_size: self.width, None
-                on_press: root.press_category()
+                on_press: root.press_npo()
 
         Button:
-            text: "Search for all categories"
-            on_press: root.press_all_categories()
-
-
-<GrantWindow>:
-    id: third_screen
-    name: "third"
-    page: 0
-    on_leave:
-        root.page= 0
-
-    BoxLayout:
-        orientation: "vertical"
-        size: root.width, root.height
-
-        padding: 50
-        spacing: 20
-
-        GridLayout:
-            cols: 4
-            size_hint_x: None
-            width: 620
-            size_hint_y: None
-            height: 50
-            spacing: 10
-
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "NPOs"
-                on_release:
-                    app.root.current = "first"
-                    root.manager.transition.direction = "right"
-
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Categories"
-                on_release:
-                    app.root.current = "second"
-                    root.manager.transition.direction = "right"
-
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                background_color: (0, 0, 1, 1)
-                text: "Grants"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Hello"
-
-        GridLayout:
-            cols: 3
-            padding: 10
-
-            Label:
-                id: name_labels
-                text: "Search for NPO's possible grants"
-                text_size: self.width, None
-
-            TextInput:
-                id: name_input
-                multiline: False
-
-            Button:
-                text: "Search for NPO's grants"
-                text_size: self.width, None
-                on_press: root.press_grant()
-
-        Button:
-            text: "Search for all grants"
-            on_press: root.press_all_grants()
-
+            text: "Search for all NPOs"
+            on_press: root.press_all_npos()

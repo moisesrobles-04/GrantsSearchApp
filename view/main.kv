@@ -1,0 +1,21 @@
+#: include view/grants.kv
+#: include view/npo.kv
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+
+WindowManager:
+    transition: NoTransition()
+    id: main_screen
+    #NPO Windows
+    NpoWindow:
+        id: first_screen
+    NpoSearchWindow:
+        id: npo_first_screen
+    NpoCreateWindow:
+        id: npo_second_screen
+    NpoDeleteWindow:
+        id: npo_third_screen
+
+    CategoryWindow:
+        id: second_screen
+    GrantWindow:
+        id: third_screen

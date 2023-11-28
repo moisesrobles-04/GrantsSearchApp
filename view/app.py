@@ -3,7 +3,6 @@ from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.properties import NumericProperty
 
 import csv
 from controller.npo_controller import npoController
@@ -13,15 +12,28 @@ from controller.grant_controller import grantController
 
 #Defined our different Windows
 class NpoWindow(Screen):
+    pass
+
+class NpoSearchWindow(Screen):
+    npo_id = -1
+
+    def dropdown(self):
+        n_list = npoController().get_all_npos()
+        npos = []
+        for elem in n_list:
+            npos.append(elem["name"])
+        return npos
+
+
     def press_npo(self):
-        name = self.ids.name_input.text
+        name = self.ids.NPO_dropdown.text
         if name != "":
             npo = npoController().get_npo_by_name(name)
             if npo["n_id"] ==-1:
                 self.ids.name_labels.text = npo["name"]
             else:
+                self.npo_id = npo["n_id"]
                 self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
-            self.ids.name_input.text = ""
 
     def press_all_npos(self):
         n_list = npoController().get_all_npos()
@@ -31,7 +43,11 @@ class NpoWindow(Screen):
 
         self.ids.name_labels.text = text
 
+class NpoCreateWindow(Screen):
+    pass
 
+class NpoDeleteWindow(Screen):
+    pass
 
 class CategoryWindow(Screen):
     def press_category(self):
@@ -53,7 +69,7 @@ class CategoryWindow(Screen):
         self.ids.name_labels.text = text
 
 class GrantWindow(Screen):
-    page = NumericProperty(0)
+    # page = 0
 
     def press_grant(self):
         name = self.ids.name_input.text
@@ -69,13 +85,12 @@ class GrantWindow(Screen):
             self.ids.name_input.text = ""
 
     def press_all_grants(self):
-        k = self.root.ids.main_window
-        print(k)
-        g_list = grantController().get_all_grants(self.ids.main_window.grant_page.page)
+        g_list = grantController().get_all_grants(self.page)
         text = "The Grants are:"
         for i in g_list:
             text += f'{i["o_number"]}, '
-        self.ids.grant_page.page += 1
+        self.page += 1
+        print(self.page)
         self.ids.name_labels.text = text
 
 class WindowManager(ScreenManager):
@@ -85,7 +100,8 @@ class GrantsApp(App):
     def build(self):
         return kv
 
-kv = Builder.load_file('grants.kv')
+kv = Builder.load_file('main.kv')
+# Builder.load_file('npo.kv')
 Window.size = (700,700)
 
 if __name__ == '__main__':

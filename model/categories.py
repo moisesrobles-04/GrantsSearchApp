@@ -47,7 +47,7 @@ class categoryDAO():
     def getCategories(self):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From categories"""
+            query = """Select * From categories order by category"""
             cur.execute(query)
 
         except(Exception, sqlite3.Error) as error:
