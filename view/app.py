@@ -11,10 +11,10 @@ from controller.npocat_controller import npocatController
 from controller.grant_controller import grantController
 
 #Defined our different Windows
-class NpoWindow(Screen):
-    pass
+# class NpoWindow(Screen):
+#     pass
 
-class NpoSearchWindow(Screen):
+class NpoWindow(Screen):
     npo_id = -1
 
     def dropdown(self):
@@ -35,6 +35,17 @@ class NpoSearchWindow(Screen):
                 self.npo_id = npo["n_id"]
                 self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
 
+    def update_npo(self):
+        name = self.ids.NPO_dropdown.text
+        if name != "":
+            npo = npoController().get_npo_by_name(name)
+            if npo["n_id"] ==-1:
+                self.ids.name_labels.text = npo["name"]
+            else:
+                self.npo_id = npo["n_id"]
+                self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
+
+
     def press_all_npos(self):
         n_list = npoController().get_all_npos()
         text = "The NPOs are:"
@@ -42,6 +53,7 @@ class NpoSearchWindow(Screen):
             text += f'{i["name"]}, '
 
         self.ids.name_labels.text = text
+
 
 class NpoCreateWindow(Screen):
     pass

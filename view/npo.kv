@@ -18,7 +18,7 @@
             pos: self.pos
 
 <SpinnerOption>:
-    font_size: 18
+    font_size: 16
     text_size: self.width, None
 
 <NpoWindow>:
@@ -44,77 +44,6 @@
                 font_size: 22
                 background_color: (0, 0, 1, 1)
                 text: "NPOs"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Categories"
-                on_press:
-                    app.root.current = "second"
-                    root.manager.transition.direction = "up"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Grants"
-                on_release:
-                    root.manager.transition.direction = "up"
-                    app.root.current = "third"
-
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Hello"
-
-        GridLayout:
-            cols: 3
-            padding: 10
-
-            Button:
-                id: search_npo_label
-                text: "Search NPOs"
-                text_size: self.width, None
-                on_press:
-                    app.root.current = "first_one"
-
-            Button:
-                id: add_npo_label
-                text: "Add NPO"
-                text_size: self.width, None
-
-            Button:
-                id: remove_npo_label
-                text: "Remove NPO"
-                text_size: self.width, None
-
-
-        Label:
-            height: 20
-
-
-<NpoSearchWindow>:
-    name: "first_one"
-
-    BoxLayout:
-        orientation: "vertical"
-        size: root.width, root.height
-
-        padding: 50
-        spacing: 20
-
-        GridLayout:
-            cols: 4
-            size_hint_x: None
-            width: 620
-            size_hint_y: None
-            height: 50
-            spacing: 10
-
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                background_color: (0, 0, 1, 1)
-                text: "Back"
-                on_press:
-                    app.root.current = "first"
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
@@ -151,10 +80,17 @@
                 #on_text: root.spinner_clicked(spinner_id.text)
 
             Button:
-                text: "Search for a NPO"
+                text: "Update NPO"
                 text_size: self.width, None
                 on_press: root.press_npo()
 
-        Button:
-            text: "Search for all NPOs"
-            on_press: root.press_all_npos()
+        GridLayout:
+            cols: 2
+            padding: 10
+            Button:
+                text: "Add NPO"
+                on_press: root.press_all_npos()
+
+            Button:
+                text: "Remove NPO"
+                on_press: root.press_all_npos()
