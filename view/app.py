@@ -3,11 +3,13 @@ from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.properties import NumericProperty
 
 import csv
 from controller.npo_controller import npoController
 from controller.categories_controller import categoryController
 from controller.npocat_controller import npocatController
+from controller.grant_controller import grantController
 
 #Defined our different Windows
 class NpoWindow(Screen):
@@ -50,6 +52,32 @@ class CategoryWindow(Screen):
 
         self.ids.name_labels.text = text
 
+class GrantWindow(Screen):
+    page = NumericProperty(0)
+
+    def press_grant(self):
+        name = self.ids.name_input.text
+        if name != "":
+            grant = grantController().get_grant_by_NPOname(name)
+            if type(grant) == dict:
+                self.ids.name_labels.text = grant["message"]
+            else:
+                text = ''
+                for elem in grant:
+                    text += f'The #{elem["g_id"]} grant is {elem["o_number"]}, '
+                self.ids.name_labels.text = text
+            self.ids.name_input.text = ""
+
+    def press_all_grants(self):
+        k = self.root.ids.main_window
+        print(k)
+        g_list = grantController().get_all_grants(self.ids.main_window.grant_page.page)
+        text = "The Grants are:"
+        for i in g_list:
+            text += f'{i["o_number"]}, '
+        self.ids.grant_page.page += 1
+        self.ids.name_labels.text = text
+
 class WindowManager(ScreenManager):
     pass
 
@@ -61,5 +89,4 @@ kv = Builder.load_file('grants.kv')
 Window.size = (700,700)
 
 if __name__ == '__main__':
-
     GrantsApp().run()
