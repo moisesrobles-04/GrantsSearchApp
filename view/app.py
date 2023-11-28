@@ -7,6 +7,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 import csv
 from controller.npo_controller import npoController
 from controller.categories_controller import categoryController
+from controller.npocat_controller import npocatController
 
 #Defined our different Windows
 class NpoWindow(Screen):
@@ -27,6 +28,8 @@ class NpoWindow(Screen):
             text += f'{i["name"]}, '
 
         self.ids.name_labels.text = text
+
+
 
 class CategoryWindow(Screen):
     def press_category(self):
@@ -54,9 +57,9 @@ class GrantsApp(App):
     def build(self):
         return kv
 
-
 kv = Builder.load_file('grants.kv')
 Window.size = (700,700)
 
 if __name__ == '__main__':
+
     GrantsApp().run()
