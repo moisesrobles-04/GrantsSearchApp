@@ -3,6 +3,8 @@ from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.popup import Popup
 
 import csv
 from controller.npo_controller import npoController
@@ -15,8 +17,9 @@ npo_id = -1
 
 #Defined our different Windows
 class NpoUpdateWindow(Screen):
-    def on_leave(self, *args):
-        self.clear_widgets()
+    # def on_enter(self, *args):
+    #     print("hello")
+    #     self.clear_widgets()
 
     def npo_selected(self):
         pass
@@ -35,8 +38,8 @@ class NpoUpdateWindow(Screen):
 
 
 class NpoWindow(Screen):
-    def on_leave(self, *args):
-        self.clear_widgets()
+    def on_pre_enter(self, *args):
+        self.dropdown()
 
     def dropdown(self):
         n_list = npoController().get_all_npos()
@@ -59,8 +62,8 @@ class NpoWindow(Screen):
                     if i.name == "update_npo":
                         break
                     index +=1
-                self.manager.screens[index].ids.name_labels.text = npo["name"]
-                self.manager.current = "update_npo"
+                self.parent.screens[index].ids.name_labels.text = npo["name"]
+                return "update_npo"
 
     def press_all_npos(self):
         n_list = npoController().get_all_npos()
@@ -72,10 +75,53 @@ class NpoWindow(Screen):
 
 
 class NpoCreateWindow(Screen):
-    pass
+    def add_npo(self):
+        name = self.ids.name_input.text
+        npo_exists = npoController().get_npo_by_name(name)
+        if npo_exists["n_id"] == -1:
+            npo_exists["name"] = name
+            NpoCreatePop(npo_exists).open_pop()
+        else:
+            NpoCreatePop(npo_exists).open_pop()
+
+class NpoCreatePop(FloatLayout):
+    def __init__(self, npo):
+        super().__init__()
+        self.npo_id = npo["n_id"]
+        self.npo_name = npo["name"]
+
+    def open_pop(self):
+        if self.npo_id == -1:
+            self.message(self.npo_name)
+            self.popup = Popup(title= "PopupWindow", content=self, size_hint= (None, None), size=(700,700))
+        else:
+            self.error(self.npo_name)
+            self.popup = Popup(title= "PopupWindow", content= self, size_hint= (None, None), size=(700,700))
+
+        self.popup.open()
+
+    def close_pop(self):
+        self.popup.dismiss()
+
+    def message(self, name):
+        self.ids.name_label.text = f'Are you sure you want to create the NPO {name}?'
+        self.ids.button_name.text = "Confirm"
+
+
+    def create(self, name):
+        dict = {"name": name}
+        create = npoController().create_npo(dict)
+        return create
+
+    def error(self, name):
+        self.ids.name_label.text = f'NPO {name} already exist, cannot create'
+        self.npo_name = "None"
+        self.ids.button_name.text = "Return"
+
 
 class NpoDeleteWindow(Screen):
     pass
+
 
 class CategoryWindow(Screen):
     def press_category(self):
@@ -120,6 +166,12 @@ class GrantWindow(Screen):
         self.page += 1
         print(self.page)
         self.ids.name_labels.text = text
+
+# class result():
+#     with open("test.csv", "w") as file:
+#         write = csv.writer(file)
+
+
 
 class WindowManager(ScreenManager):
     pass
