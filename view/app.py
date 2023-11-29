@@ -10,12 +10,33 @@ from controller.categories_controller import categoryController
 from controller.npocat_controller import npocatController
 from controller.grant_controller import grantController
 
+npo_id = -1
+
+
 #Defined our different Windows
-# class NpoWindow(Screen):
-#     pass
+class NpoUpdateWindow(Screen):
+    def on_leave(self, *args):
+        self.clear_widgets()
+
+    def npo_selected(self):
+        pass
+
+
+    def update_npo(self):
+        name = self.ids.NPO_dropdown.text
+        if name != "":
+            npo = npoController().get_npo_by_name(name)
+            if npo["n_id"] == -1:
+                self.ids.name_labels.text = npo["name"]
+            else:
+                global npo_id
+                npo_id = npo["n_id"]
+                self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
+
 
 class NpoWindow(Screen):
-    npo_id = -1
+    def on_leave(self, *args):
+        self.clear_widgets()
 
     def dropdown(self):
         n_list = npoController().get_all_npos()
@@ -24,7 +45,6 @@ class NpoWindow(Screen):
             npos.append(elem["name"])
         return npos
 
-
     def press_npo(self):
         name = self.ids.NPO_dropdown.text
         if name != "":
@@ -32,19 +52,15 @@ class NpoWindow(Screen):
             if npo["n_id"] ==-1:
                 self.ids.name_labels.text = npo["name"]
             else:
-                self.npo_id = npo["n_id"]
-                self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
-
-    def update_npo(self):
-        name = self.ids.NPO_dropdown.text
-        if name != "":
-            npo = npoController().get_npo_by_name(name)
-            if npo["n_id"] ==-1:
-                self.ids.name_labels.text = npo["name"]
-            else:
-                self.npo_id = npo["n_id"]
-                self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
-
+                global npo_id
+                npo_id = npo["n_id"]
+                index = 0
+                for i in self.manager.screens:
+                    if i.name == "update_npo":
+                        break
+                    index +=1
+                self.manager.screens[index].ids.name_labels.text = npo["name"]
+                self.manager.current = "update_npo"
 
     def press_all_npos(self):
         n_list = npoController().get_all_npos()

@@ -24,6 +24,8 @@
 <NpoWindow>:
     name: "first"
 
+    on_leave: self.clear_widgets()
+
     BoxLayout:
         orientation: "vertical"
         size: root.width, root.height
@@ -77,12 +79,13 @@
                 text: "Select NPOs"
                 values: root.dropdown()
                 text_size: self.width, None
-                #on_text: root.spinner_clicked(spinner_id.text)
 
             Button:
                 text: "Update NPO"
                 text_size: self.width, None
-                on_press: root.press_npo()
+                on_release:
+                    app.root.current = root.press_npo()
+                    root.manager.transition.direction= "left"
 
         GridLayout:
             cols: 2
@@ -94,3 +97,93 @@
             Button:
                 text: "Remove NPO"
                 on_press: root.press_all_npos()
+
+<NpoUpdateWindow>:
+    name: "update_npo"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        padding: 50
+        spacing: 20
+
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (0, 0, 1, 1)
+                text: "Back"
+                on_press:
+                    app.root.current = "first"
+                    root.manager.transition.direction = "left"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Categories"
+                on_press:
+                    app.root.current = "second"
+                    root.manager.transition.direction = "left"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Grants"
+                on_release:
+                    app.root.current = "third"
+                    root.manager.transition.direction= "left"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Hello"
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Label:
+                id: name_labels
+                text: ""
+                text_size: self.width, None
+
+            Label:
+                text: "Yeah"
+
+            Button:
+                text: "Update NPO"
+                text_size: self.width, None
+                on_release:
+                    app.root.current = self.npo_selected()
+                    root.manager.transition.direction= "left"
+
+        GridLayout:
+            cols: 2
+            padding: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
+            Label:
+                id: "box_energy"
+                text: "Hello"
+                canvas.before:
+                    Color:
+                        rgba: 0,0,0,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            CheckBox:
+                canvas.before:
+                    Color:
+                        rgba: 0,0,0,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                on_active: root.press_all_npos()

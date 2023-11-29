@@ -4,16 +4,26 @@
 
 WindowManager:
     transition: NoTransition()
-    id: main_screen
+    id: screen_manager
+
     #NPO Windows
     NpoWindow:
         id: first_screen
+        manager: screen_manager
     NpoCreateWindow:
         id: npo_second_screen
+        manager: screen_manager
     NpoDeleteWindow:
         id: npo_third_screen
+        manager: screen_manager
+    NpoUpdateWindow:
+        id: npo_fourth_screen
+        manager: screen_manager
 
     CategoryWindow:
         id: second_screen
+        manager: screen_manager
+
     GrantWindow:
         id: third_screen
+        manager: screen_manager
