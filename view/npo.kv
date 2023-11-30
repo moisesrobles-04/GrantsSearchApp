@@ -266,7 +266,7 @@
         Label:
             text: ""
 
-<NpoCreatePop>:
+<NpoPop>:
     name: "npo_pop"
     npo_name: ""
 
@@ -291,7 +291,7 @@
         size_hint: 0.8, 0.2
         pos_hint: {"x":0.1, "y":0.1}
         on_release:
-            if root.npo_name != "None": root.create(root.npo_name)
+            if root.npo_name != "None": root.crud_action(root.npo_name)
             if root.npo_name != "None": app.root.current = "first"
             root.close_pop()
 
@@ -393,6 +393,6 @@
         size_hint: 0.8, 0.2
         pos_hint: {"x":0.1, "y":0.1}
         on_release:
-            if root.npo_name != "None": root.delete(root.npo_name)
+            if root.npo_name != "None": root.crud_action(root.npo_name)
             if root.npo_name != "None": app.root.current = "first"
             root.close_pop()
