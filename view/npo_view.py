@@ -101,6 +101,8 @@ class NpoUpdateWindow(Screen):
 
 # Create Window
 class NpoCreateWindow(Screen):
+    def on_pre_enter(self, *args):
+        self.ids.name_input.text = ""
 
     # Create NPO entry in the database. Open Popup to confirm value.
     def add_npo(self):
@@ -142,7 +144,7 @@ class NpoPop(FloatLayout):
     # Create popup with message
     def open_pop(self):
         self.message(self.npo_name)
-        self.popup = Popup(title="PopupWindow", content=self, size_hint=(None, None), size=(700, 700))
+        self.popup = Popup(title="PopupWindow", content=self, size_hint=(None, None), size=(668, 700))
         self.popup.open()
 
     def close_pop(self):
@@ -154,28 +156,28 @@ class NpoPop(FloatLayout):
             # If no NPO, add message to confirm
             if self.npo_id == -1:
                 self.ids.name_label.text = f'Are you sure you want to create the NPO {name}?'
-                self.ids.button_name.text = "Confirm"
+                self.ids.confirm_button.text = "Confirm"
 
             # If a NPO exist, throw exist message
             else:
                 self.ids.name_label.text = f'NPO {name} already exist, cannot create'
                 self.npo_name = "None"
-                self.ids.button_name.text = "Return"
+                self.ids.confirm_button.text = "Return"
 
         # Delete Messages
         elif self.action == "Delete":
             # If a NPO exist, add message to confirm delete
             if self.npo_id != -1:
                 self.ids.name_label.text = f'Are you sure you want to delete the NPO {name}?'
-                self.ids.button_name.text = "Confirm"
+                self.ids.confirm_button.text = "Confirm"
 
             # If a NPO does not exist, throw not found message
             else:
                 self.ids.name_label.text = f'NPO {name} was not found'
                 self.npo_name = "None"
-                self.ids.button_name.text = "Return"
+                self.ids.confirm_button.text = "Return"
 
-# Crud operations for the Pop Up window
+# Crud operations for the pop-up window
     def crud_action(self, name):
         if self.action == "Create":
             dict = {"name": name}
