@@ -18,7 +18,10 @@
             pos: self.pos
 
 <SpinnerOption>:
-    font_size: 16
+    background_color: 0.2,0.2,0.2,1
+    padding: 20
+    font_size: 24
+    color: (1,0.5,0,1)
     text_size: self.width, None
 
 <NpoWindow>:
@@ -82,7 +85,8 @@
                 text: "Update NPO"
                 text_size: self.width, None
                 on_release:
-                    app.root.current = root.press_npo()
+                    #app.root.current = root.press_npo()
+                    root.press_npo()
                     root.manager.transition.direction= "left"
 
         GridLayout:
@@ -261,7 +265,6 @@
         Label:
             text: ""
 
-
 <NpoCreatePop>:
     name: "npo_pop"
     npo_name: ""
@@ -288,5 +291,107 @@
         pos_hint: {"x":0.1, "y":0.1}
         on_release:
             if root.npo_name != "None": root.create(root.npo_name)
+            if root.npo_name != "None": app.root.current = "first"
+            root.close_pop()
+
+<NpoDeleteWindow>:
+    name: "delete_npo"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        padding: 50
+        spacing: 20
+
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (0, 0, 1, 1)
+                text: "Back"
+                on_press:
+                    app.root.current = "first"
+                    root.manager.transition.direction = "left"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Categories"
+                on_press:
+                    app.root.current = "second"
+                    root.manager.transition.direction = "left"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Grants"
+                on_release:
+                    app.root.current = "third"
+                    root.manager.transition.direction= "left"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Hello"
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Label:
+                id: name_labels
+                text: "Select NPO to delete:"
+                text_size: self.width, None
+                font_size: 64
+
+            Spinner:
+                id: NPO_dropdown
+                text: "NPOs"
+                #values: self.manager.screen.get_screen("first").dropdown()
+                text_size: self.width, None
+
+            Button:
+                text: "Create NPO"
+                text_size: self.width, None
+                font_size: 70
+                color: 0, 0.5, 0, 1
+                on_release:
+                    app.root.current = root.add_npo()
+                    root.manager.transition.direction= "left"
+
+        Label:
+            text: ""
+
+<NpoDeletePop>:
+    name: "npo_delete_pop"
+    npo_name: ""
+
+    canvas.before:
+        Color:
+            rgba: 0,0,0,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    Label:
+        id: name_label
+        text: "You pressed the button"
+        size_hint: 0.6, 0.2
+        text_size: self.width, None
+        pos_hint: {"x":0.2, "top":1}
+
+    Button:
+        id: button_name
+        color: 0,0.5,0,1
+        text: "Confirm"
+        size_hint: 0.8, 0.2
+        pos_hint: {"x":0.1, "y":0.1}
+        on_release:
+            if root.npo_name != "None": root.delete(root.npo_name)
             if root.npo_name != "None": app.root.current = "first"
             root.close_pop()

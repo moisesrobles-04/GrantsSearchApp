@@ -1,4 +1,5 @@
 from model.npo import npoDAO
+from model.npocat import npocatDAO
 
 class npoController:
 
@@ -71,3 +72,32 @@ class npoController:
         dao.updateNPO(npo[0], npo[1])
         npo_dict = self.build_npo_map_dict(npo)
         return npo_dict
+
+    """
+    =====================
+           Delete      
+    =====================
+    """
+
+    def delete_npo(self, json):
+        dao = npoDAO()
+        npo_exist = dao.getNPO_byName(json["name"])
+        if npo_exist == None:
+            return self.build_npo_map_dict([-1, f"NPO {npo_exist[1]} already exist"])
+        dao = npocatDAO()
+        dao.delete_NPOCat(npo_exist["n_id"])
+
+        get_dao = npocatDAO()
+        valid = get_dao.getNPOCat_byNpoId(npo_exist["n_id"])
+
+        if len(valid) == 0:
+            dao = npoDAO()
+            row = dao.deleteNPO(npo_exist["n_id"])
+
+            if row:
+                return f'{json["name"]} was delete from the database'
+
+            else:
+                return f'NPO {json["name"]} did not delete correctly, try again'
+        else:
+            return f'NPO still have categories'
