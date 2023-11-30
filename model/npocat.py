@@ -74,7 +74,7 @@ class npocatDAO():
 
         finally:
             if self.db.connection is not None:
-                result = cur.fetchone()
+                result = cur.fetchall()
                 cur.close()
                 self.db.close()
                 return result

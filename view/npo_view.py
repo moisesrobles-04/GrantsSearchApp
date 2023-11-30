@@ -114,11 +114,12 @@ class NpoCreateWindow(Screen):
     # Create NPO entry in the database. Open Popup to confirm value.
     def add_npo(self):
         name = self.ids.name_input.text
-        npo_exists = npoController().get_npo_by_name(name)
-        if npo_exists["n_id"] == -1:
-            npo_exists["name"] = name
+        if name != "":
+            npo_exists = npoController().get_npo_by_name(name)
+            if npo_exists["n_id"] == -1:
+                npo_exists["name"] = name
 
-        NpoCreatePop(npo_exists).open_pop()
+            NpoCreatePop(npo_exists).open_pop()
 
 
 # Create Popup Window
@@ -157,14 +158,20 @@ class NpoCreatePop(FloatLayout):
 
 # Delete Window
 class NpoDeleteWindow(Screen):
+
+    def on_pre_enter(self, *args):
+        self.ids.NPO_dropdown.text = "NPOs"
+
     # Delete NPO entry in the database. Open Popup to confirm value.
     def remove_npo(self):
-        name = self.ids.name_input.text
-        npo_exists = npoController().get_npo_by_name(name)
-        if npo_exists["n_id"] == -1:
-            npo_exists["name"] = name
+        name = self.ids.NPO_dropdown.text
+        if name != "NPOs":
+            npo_exists = npoController().get_npo_by_name(name)
+            if npo_exists["n_id"] == -1:
+                npo_exists["name"] = name
 
-        NpoCreatePop(npo_exists).open_pop()
+            NpoDeletePop(npo_exists).open_pop()
+
 
 # Delete Window
 class NpoDeletePop(Screen):
@@ -185,7 +192,7 @@ class NpoDeletePop(Screen):
 
     def message(self, name):
         # If a NPO exist, add message to confirm delete
-        if self.npo_id == -1:
+        if self.npo_id != -1:
             self.ids.name_label.text = f'Are you sure you want to delete the NPO {name}?'
             self.ids.button_name.text = "Confirm"
 
@@ -197,5 +204,5 @@ class NpoDeletePop(Screen):
 
     def delete(self, name):
         dict = {"name": name}
-        create = npoController().delete_npo(dict)
-        return create
+        delete = npoController().delete_npo(dict)
+        return delete

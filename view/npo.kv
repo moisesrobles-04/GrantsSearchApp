@@ -99,7 +99,8 @@
 
             Button:
                 text: "Remove NPO"
-                on_press: root.press_all_npos()
+                on_release:
+                    app.root.current = "delete_npo"
 
 <NpoUpdateWindow>:
     name: "update_npo"
@@ -352,16 +353,16 @@
             Spinner:
                 id: NPO_dropdown
                 text: "NPOs"
-                #values: self.manager.screen.get_screen("first").dropdown()
+                values: root.manager.get_screen("first").ids.NPO_dropdown.values
                 text_size: self.width, None
 
             Button:
-                text: "Create NPO"
+                text: "Delete NPO"
                 text_size: self.width, None
                 font_size: 70
                 color: 0, 0.5, 0, 1
                 on_release:
-                    app.root.current = root.add_npo()
+                    if root.ids.NPO_dropdown!= "NPOs": app.root.current = root.remove_npo()
                     root.manager.transition.direction= "left"
 
         Label:
@@ -376,7 +377,7 @@
             rgba: 0,0,0,1
         Rectangle:
             size: self.size
-            pos: self.pos
+            pos: 0,0
 
     Label:
         id: name_label

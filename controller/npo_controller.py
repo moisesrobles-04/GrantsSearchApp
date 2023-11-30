@@ -84,17 +84,18 @@ class npoController:
         npo_exist = dao.getNPO_byName(json["name"])
         if npo_exist == None:
             return self.build_npo_map_dict([-1, f"NPO {npo_exist[1]} already exist"])
+        npo_exist = self.build_npo_map_dict(npo_exist)
         dao = npocatDAO()
         dao.delete_NPOCat(npo_exist["n_id"])
 
         get_dao = npocatDAO()
         valid = get_dao.getNPOCat_byNpoId(npo_exist["n_id"])
 
-        if len(valid) == 0:
+        if len(valid) == 0 or valid == None:
             dao = npoDAO()
             row = dao.deleteNPO(npo_exist["n_id"])
 
-            if row:
+            if row.rowcount>0:
                 return f'{json["name"]} was delete from the database'
 
             else:
