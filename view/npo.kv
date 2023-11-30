@@ -165,8 +165,11 @@
                 text: "Update NPO"
                 text_size: self.width, None
                 on_release:
-                    app.root.current = self.npo_selected()
+                    app.root.current = root.change_name()
                     root.manager.transition.direction= "left"
+
+        Label:
+            text: ""
 
         GridLayout:
             cols: 2

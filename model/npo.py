@@ -29,7 +29,7 @@ class npoDAO():
     def updateNPO(self, n_id, name):
         try:
             cur = self.db.connection.cursor()
-            query = """Update NPO (name) set name = ?
+            query = """Update NPO set name = ?
                         where n_id = ?"""
             ex = (name, n_id)
             cur.execute(query, ex)

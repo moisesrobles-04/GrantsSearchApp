@@ -12,16 +12,16 @@ NPO Window Hierarchy:
     NpoWindow
             |
             |---- NpoUpdateWindow
-            |                   |
-            |                   |---- NpoUpdatePop
+            |           |
+            |           |---- NpoPop
             |
             |---- NpoCreateWindow
-            |                   |
-            |                   |---- NpoCreatePop
+            |           |            
+            |           |---- NpoPop
             |
             |---- NpoDeleteWindow
-                                |
-                                |---- NpoDeletePop
+                        |
+                        |---- NpoPop
 """
 
 
@@ -33,6 +33,7 @@ class NpoWindow(Screen):
     def on_pre_enter(self, *args):
         if self.reset_value:
             self.ids.name_labels.text = "Which NPO are you looking for?"
+            self.ids.NPO_dropdown.text = "Select NPOs"
             self.ids.NPO_dropdown.values = self.dropdown()
 
     # Activate reset; on_enter fails when opening app
@@ -76,17 +77,20 @@ class NpoWindow(Screen):
 # Update Window
 class NpoUpdateWindow(Screen):
 
+    #Update the name of the NPO
     def change_name(self):
-        name = self.ids.input_name.text
+        name = self.ids.name_labels.text
         if name != "":
             npo = npoController().get_npo_by_name(name)
             if npo["n_id"] == -1:
                 self.ids.name_labels.text = npo["name"]
             else:
-                print(f'Are you sure you want to change {self.ids.name_labels.text} name to {name}')
-                return
+                new_name = self.ids.input_label.text
+                npo["name"] = new_name
+                NpoPop(npo, "Update", name).open_pop()
 
-    # MUST FINISH FUNCTION (Update NPO's name and npocat)
+
+    # MUST FINISH FUNCTION (Update NPO's npocat)
     def update_npo(self):
         name = self.ids.NPO_dropdown.text
         if name != "":
@@ -97,6 +101,8 @@ class NpoUpdateWindow(Screen):
                 global npo_id
                 npo_id = npo["n_id"]
                 self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
+
+
 
 
 # Create Window
@@ -135,11 +141,12 @@ class NpoDeleteWindow(Screen):
 
 # Create Popup Window
 class NpoPop(FloatLayout):
-    def __init__(self, npo, action):
+    def __init__(self, npo, action, old_name=None):
         super().__init__()
         self.npo_id = npo["n_id"]
         self.npo_name = npo["name"]
         self.action = action
+        self.old_name = old_name
 
     # Create popup with message
     def open_pop(self):
@@ -177,7 +184,21 @@ class NpoPop(FloatLayout):
                 self.npo_name = "None"
                 self.ids.confirm_button.text = "Return"
 
-# Crud operations for the pop-up window
+        # Update Messages
+        elif self.action == "Update":
+            # If a NPO exist, add message to confirm delete
+            if self.npo_id != -1:
+                self.ids.name_label.text = f'Are you sure you want to change' \
+                                           f' {self.old_name}\'s name to {name}?'
+                self.ids.confirm_button.text = "Confirm"
+
+            # If a NPO does not exist, throw not found message
+            else:
+                self.ids.name_label.text = f'NPO {name} was not found'
+                self.npo_name = "None"
+                self.ids.confirm_button.text = "Return"
+
+    # Crud operations for the pop-up window
     def crud_action(self, name):
         if self.action == "Create":
             dict = {"name": name}
@@ -188,3 +209,11 @@ class NpoPop(FloatLayout):
             dict = {"name": name}
             delete = npoController().delete_npo(dict)
             return delete
+
+        elif self.action == "Update":
+            global npo_id
+            dict = {"n_id": npo_id, "name": name}
+            update = npoController().update_npo(dict)
+            return update
+
+
