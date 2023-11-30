@@ -151,8 +151,10 @@
                 text: ""
                 text_size: self.width, None
 
-            Label:
-                text: "Yeah"
+            TextInput:
+                id: input_label
+                multiline: False
+                text_size: self.width, None
 
             Button:
                 text: "Update NPO"
@@ -169,6 +171,7 @@
             size_hint_y: None
             height: 50
             spacing: 10
+
             Label:
                 id: "box_energy"
                 text: "Hello"
@@ -234,11 +237,6 @@
 
         GridLayout:
             cols: 3
-            size_hint_x: None
-            width: 1300
-            size_hint_y: None
-            height: 750
-            spacing: 10
             padding: 10
 
             Label:
@@ -275,7 +273,6 @@
             size: self.size
             pos: self.pos
 
-
     Label:
         id: name_label
         text: "You pressed the button"
@@ -289,7 +286,7 @@
         text: "Confirm"
         size_hint: 0.8, 0.2
         pos_hint: {"x":0.1, "y":0.1}
-        on_press: root.close_pop()
         on_release:
             if root.npo_name != "None": root.create(root.npo_name)
-
+            if root.npo_name != "None": app.root.current = "first"
+            root.close_pop()
