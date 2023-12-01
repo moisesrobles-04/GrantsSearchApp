@@ -1,8 +1,11 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
+from kivy.uix.button import Button
+import time
 
 from controller.npo_controller import npoController
+from controller.npocat_controller import npocatController
 
 npo_id = -1
 
@@ -35,6 +38,8 @@ class NpoWindow(Screen):
             self.ids.name_labels.text = "Which NPO are you looking for?"
             self.ids.NPO_dropdown.text = "Select NPOs"
             self.ids.NPO_dropdown.values = self.dropdown()
+            self.manager.get_screen("update_npo").remove_widget(self.manager.get_screen("update_npo").btn)
+
 
     # Activate reset; on_enter fails when opening app
     def on_leave(self, *args):
@@ -76,6 +81,32 @@ class NpoWindow(Screen):
 
 # Update Window
 class NpoUpdateWindow(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        global npo_id
+        self.npocat = npocatController().get_npocat_by_npoid(npo_id)
+
+    def on_pre_enter(self, *args):
+        time.sleep(1)
+        # Must create checklist independently, cannot use for loop :/
+        # for i in range(5):
+        #     pos = 0.1 * i
+        #     self.btn = Button(text='My first button',
+        #                       size_hint_x= None,
+        #                       width= 500,
+        #                       size_hint_y = None,
+        #                       height= 50,
+        #                       padding = 20,
+        #                       pos_hint={'top': pos, 'right': 0.4})
+        #     self.add_widget(self.btn)
+
+    def check_list(self):
+        temp = self.children[0].children[0]
+        for wid in temp.children:
+            print(wid)
+
+    def on_pre_leave(self, *args):
+        self.remove_widget(self.btn)
 
     #Update the name of the NPO
     def change_name(self):

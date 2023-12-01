@@ -172,6 +172,7 @@
             text: ""
 
         GridLayout:
+            id: "boxes"
             cols: 2
             padding: 4
             size_hint_x: None
@@ -179,6 +180,24 @@
             size_hint_y: None
             height: 50
             spacing: 10
+
+            Label:
+                id: "box_ergy"
+                text: "Hello"
+                canvas.before:
+                    Color:
+                        rgba: 0,0,0,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            CheckBox:
+                canvas.before:
+                    Color:
+                        rgba: 0,0,0,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                on_active: root.check_list()
 
             Label:
                 id: "box_energy"
@@ -196,7 +215,7 @@
                     Rectangle:
                         size: self.size
                         pos: self.pos
-                on_active: root.press_all_npos()
+                on_active: root.check_list()
 
 <NpoCreateWindow>:
     name: "create_npo"
