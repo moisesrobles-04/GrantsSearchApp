@@ -105,8 +105,6 @@
 <NpoUpdateWindow>:
     name: "update_npo"
 
-    on_pre_enter: self.switch()
-
     BoxLayout:
         orientation: "vertical"
         size: root.width, root.height
@@ -184,6 +182,24 @@
             spacing: 10
 
             Label:
+                id: box_agriculture
+                text: "Agriculture"
+                canvas.before:
+                    Color:
+                        rgba: 0,0,0,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+            CheckBox:
+                id: check_agriculture
+                canvas.before:
+                    Color:
+                        rgba: 0,0,0,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            Label:
                 id: box_energy
                 text: "Energy"
                 canvas.before:
@@ -200,26 +216,6 @@
                     Rectangle:
                         size: self.size
                         pos: self.pos
-                on_active: root.check_list()
-
-            Label:
-                id: box_health
-                text: "health"
-                canvas.before:
-                    Color:
-                        rgba: 0,0,0,1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-            CheckBox:
-                id: check_health
-                canvas.before:
-                    Color:
-                        rgba: 0,0,0,1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-                on_active: root.check_list()
 
 <NpoCreateWindow>:
     name: "create_npo"

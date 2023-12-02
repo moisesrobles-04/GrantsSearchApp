@@ -9,6 +9,7 @@ import time
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
+from controller.categories_controller import categoryController
 
 npo_id = -1
 
@@ -41,7 +42,7 @@ class NpoWindow(Screen):
             self.ids.name_labels.text = "Which NPO are you looking for?"
             self.ids.NPO_dropdown.text = "Select NPOs"
             self.ids.NPO_dropdown.values = self.dropdown()
-            self.manager.get_screen("update_npo").remove_widget(self.manager.get_screen("update_npo").btn)
+            #self.manager.get_screen("update_npo").remove_widget(self.manager.get_screen("update_npo").btn)
 
 
     # Activate reset; on_enter fails when opening app
@@ -84,18 +85,20 @@ class NpoWindow(Screen):
 
 # Update Window
 class NpoUpdateWindow(Screen):
-    def __init__(self, **kw):
-        super().__init__(**kw)
+
+    def on_pre_enter(self, *args):
+        elements = self.ids.boxes
         global npo_id
         self.npocat = npocatController().get_npocat_by_npoid(npo_id)
 
-    def switch(self):
-        self.ids.check_health.active = True
+        for i in range(0, len(elements.children) - 1, 2):
+            labels = elements.children[i+1]
+            if isinstance(labels, Label) and any(dictionary.get('category') == labels.text for dictionary in self.npocat):
+                if isinstance(elements.children[i], CheckBox):
+                    elements.children[i].active = True
 
     def on_leave(self, *args):
-
-        for elem in self.npocat:
-            update = npocatController().update_npocat(elem)
+        self.check_list()
 
     # def on_pre_enter(self, *args):
     #     time.sleep(1)
@@ -116,22 +119,26 @@ class NpoUpdateWindow(Screen):
         global npo_id
         temp = self.ids.boxes
         check_list = npocatController().get_npocat_by_npoid(npo_id)
-        temp_label = ""
-        for i in range(0, len(temp.children)-1, 2):
-            box = temp.children[i]
-            l = temp.children[i+1]
-            if isinstance(l, Label):
-                temp_label = l.text
+        if any(dictionary.get('n_id') != -1 for dictionary in check_list):
+            for i in range(0, len(temp.children)-1, 2):
+                box = temp.children[i]
+                l = temp.children[i+1]
+                if isinstance(l, Label):
+                    if isinstance(box, CheckBox):
+                        # if box.active and any(dictionary.get('category') == l.text for dictionary in self.npocat):
+                        #     continue
+                        cat = categoryController().get_category_by_name(l.text)
+                        npo_dict = {"n_id": npo_id, "c_id": cat['c_id']}
 
-            if isinstance(box, CheckBox):
-                l.text = "Temporary " + str(i)
-                if temp_label in check_list:
-                    print(box)
+                        if box.active and not any(dictionary.get('category') == l.text for dictionary in self.npocat):
+                            npocatController().create_npocat(npo_dict)
+                        elif not box.active and any(dictionary.get('category') == l.text for dictionary in self.npocat):
+                            npocatController().delete_npocat(npo_dict)
+                        else:
+                            continue
 
-    def on_pre_leave(self, *args):
-        self.remove_widget(self.btn)
 
-    #Update the name of the NPO
+    # Update the name of the NPO
     def change_name(self):
         name = self.ids.name_labels.text
         if name != "":

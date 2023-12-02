@@ -13,8 +13,6 @@ class npocatDAO():
             query = """Insert into npocategory (n_id, c_id) values (?, ?)"""
             ex = (n_id, c_id)
             cur.execute(query, ex)
-            result = cur.fetchone()[0]
-            cur.close()
             self.db.connection.commit()
 
         except(Exception, sqlite3.Error) as error:
@@ -23,6 +21,8 @@ class npocatDAO():
 
         finally:
             if self.db.connection is not None:
+                result = cur.rowcount
+                cur.close()
                 self.db.close()
                 return result
 
@@ -64,7 +64,7 @@ class npocatDAO():
     def getNPOCat_byNpoId(self, n_id):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From npocategory where n_id =? """
+            query = """Select n_id, c_id, category From npocategory Natural inner join categories where n_id =? """
             ex = (n_id,)
             cur.execute(query, ex)
 
@@ -116,17 +116,17 @@ class npocatDAO():
                 self.db.close()
                 return result
 
-    def delete_NPOCat(self, n_id):
+    def delete_NPOCat(self, n_id, c_id):
         try:
             cur = self.db.connection.cursor()
-            query = """Delete From npocategory where n_id = ?"""
-            ex = (n_id, )
+            query = """Delete From npocategory where n_id = ? and c_id = ?"""
+            ex = (n_id, c_id)
             result = cur.execute(query, ex)
             cur.close()
             self.db.connection.commit()
 
         except(Exception, sqlite3.Error) as error:
-            print("Error executing createNPOCat operation", error)
+            print("Error executing deleteNPOCat operation", error)
             self.db.connection = None
 
         finally:
