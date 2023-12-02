@@ -2,6 +2,9 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
+from kivy.uix.checkbox import CheckBox
+from kivy.uix.label import Label
+from kivy.clock import Clock
 import time
 
 from controller.npo_controller import npoController
@@ -86,8 +89,16 @@ class NpoUpdateWindow(Screen):
         global npo_id
         self.npocat = npocatController().get_npocat_by_npoid(npo_id)
 
-    def on_pre_enter(self, *args):
-        time.sleep(1)
+    def switch(self):
+        self.ids.check_health.active = True
+
+    def on_leave(self, *args):
+
+        for elem in self.npocat:
+            update = npocatController().update_npocat(elem)
+
+    # def on_pre_enter(self, *args):
+    #     time.sleep(1)
         # Must create checklist independently, cannot use for loop :/
         # for i in range(5):
         #     pos = 0.1 * i
@@ -100,10 +111,22 @@ class NpoUpdateWindow(Screen):
         #                       pos_hint={'top': pos, 'right': 0.4})
         #     self.add_widget(self.btn)
 
+    # Verify all checkboxes and mark them (code partially working)
     def check_list(self):
-        temp = self.children[0].children[0]
-        for wid in temp.children:
-            print(wid)
+        global npo_id
+        temp = self.ids.boxes
+        check_list = npocatController().get_npocat_by_npoid(npo_id)
+        temp_label = ""
+        for i in range(0, len(temp.children)-1, 2):
+            box = temp.children[i]
+            l = temp.children[i+1]
+            if isinstance(l, Label):
+                temp_label = l.text
+
+            if isinstance(box, CheckBox):
+                l.text = "Temporary " + str(i)
+                if temp_label in check_list:
+                    print(box)
 
     def on_pre_leave(self, *args):
         self.remove_widget(self.btn)

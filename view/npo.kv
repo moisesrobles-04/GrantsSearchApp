@@ -105,6 +105,8 @@
 <NpoUpdateWindow>:
     name: "update_npo"
 
+    on_pre_enter: self.switch()
+
     BoxLayout:
         orientation: "vertical"
         size: root.width, root.height
@@ -172,7 +174,7 @@
             text: ""
 
         GridLayout:
-            id: "boxes"
+            id: boxes
             cols: 2
             padding: 4
             size_hint_x: None
@@ -182,8 +184,8 @@
             spacing: 10
 
             Label:
-                id: "box_ergy"
-                text: "Hello"
+                id: box_energy
+                text: "Energy"
                 canvas.before:
                     Color:
                         rgba: 0,0,0,1
@@ -191,6 +193,7 @@
                         size: self.size
                         pos: self.pos
             CheckBox:
+                id: check_energy
                 canvas.before:
                     Color:
                         rgba: 0,0,0,1
@@ -200,8 +203,8 @@
                 on_active: root.check_list()
 
             Label:
-                id: "box_energy"
-                text: "Hello"
+                id: box_health
+                text: "health"
                 canvas.before:
                     Color:
                         rgba: 0,0,0,1
@@ -209,6 +212,7 @@
                         size: self.size
                         pos: self.pos
             CheckBox:
+                id: check_health
                 canvas.before:
                     Color:
                         rgba: 0,0,0,1

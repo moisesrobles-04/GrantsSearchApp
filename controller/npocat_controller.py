@@ -28,11 +28,12 @@ class npocatController:
             return self.build_npocat_map_dict([-1, "NPO does not exist"])
 
         dao = npocatDAO()
-        npocat = dao.getNPOCat_byNpoId(n_id)
-        if not npocat:
+        npocat_list = dao.getNPOCat_byNpoId(n_id)
+        npocat = [self.build_npocat_map_dict(row) for row in npocat_list]
+        if len(npocat)<1:
             return self.build_npocat_map_dict([-1, "NPO has no category"])
 
-        return self.build_npocat_map_dict(npocat)
+        return npocat
 
     def get_npo_by_catId(self, c_id):
         dao = categoryDAO()
