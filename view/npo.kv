@@ -168,54 +168,51 @@
                     app.root.current = root.change_name()
                     root.manager.transition.direction= "left"
 
-        Label:
-            text: ""
-
         GridLayout:
             id: boxes
-            cols: 2
+            cols: 4
             padding: 4
             size_hint_x: None
-            width: 620
+            width: 1300
             size_hint_y: None
-            height: 50
+            height: 900
             spacing: 10
 
-            Label:
-                id: box_agriculture
-                text: "Agriculture"
-                canvas.before:
-                    Color:
-                        rgba: 0,0,0,1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-            CheckBox:
-                id: check_agriculture
-                canvas.before:
-                    Color:
-                        rgba: 0,0,0,1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
+            #Label:
+             #   id: box_agriculture
+              #  text: "Agriculture"
+               # canvas.before:
+                #    Color:
+                 #       rgba: 0,0,0,1
+                  #  Rectangle:
+                   #     size: self.size
+                    #    pos: self.pos
+            #CheckBox:
+             #   id: check_agriculture
+              #  canvas.before:
+               #     Color:
+                #        rgba: 0,0,0,1
+                 #   Rectangle:
+                  #      size: self.size
+                   #     pos: self.pos
 
-            Label:
-                id: box_energy
-                text: "Energy"
-                canvas.before:
-                    Color:
-                        rgba: 0,0,0,1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-            CheckBox:
-                id: check_energy
-                canvas.before:
-                    Color:
-                        rgba: 0,0,0,1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
+#            Label:
+ #               id: box_energy
+  #              text: "Energy"
+   #             canvas.before:
+    #                Color:
+     #                   rgba: 0,0,0,1
+      #              Rectangle:
+       #                 size: self.size
+        #                pos: self.pos
+         #   CheckBox:
+          #      id: check_energy
+           #     canvas.before:
+            #        Color:
+             #           rgba: 0,0,0,1
+              #      Rectangle:
+               #         size: self.size
+                #        pos: self.pos
 
 <NpoCreateWindow>:
     name: "create_npo"

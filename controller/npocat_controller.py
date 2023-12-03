@@ -67,8 +67,6 @@ class npocatController:
             return self.build_npocat_map_dict([-1, f"NPO {npocat_exist[0]} already has category {npocat_exist[1]}"])
         dao = npocatDAO()
         row = dao.createNPOCat(json["n_id"], json['c_id'])
-        # npocat = [json["n_id"], json['c_id']]
-        # npocat_dict = self.build_npocat_map_dict(npocat)
         if row>0:
             return f'category with id {json["c_id"]} was added to the NPO with id {json["n_id"]} successfully'
         else:
