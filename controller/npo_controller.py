@@ -86,7 +86,8 @@ class npoController:
             return self.build_npo_map_dict([-1, f"NPO {npo_exist[1]} already exist"])
         npo_exist = self.build_npo_map_dict(npo_exist)
         dao = npocatDAO()
-        dao.delete_NPOCat(npo_exist["n_id"])
+
+        dao.delete_allNPOCat(npo_exist["n_id"])
 
         get_dao = npocatDAO()
         valid = get_dao.getNPOCat_byNpoId(npo_exist["n_id"])

@@ -133,3 +133,22 @@ class npocatDAO():
             if self.db.connection is not None:
                 self.db.close()
                 return result
+
+
+    def delete_allNPOCat(self, n_id):
+        try:
+            cur = self.db.connection.cursor()
+            query = """Delete From npocategory where n_id = ?"""
+            ex = (n_id, )
+            result = cur.execute(query, ex)
+            cur.close()
+            self.db.connection.commit()
+
+        except(Exception, sqlite3.Error) as error:
+            print("Error executing deleteAllNPOCat operation", error)
+            self.db.connection = None
+
+        finally:
+            if self.db.connection is not None:
+                self.db.close()
+                return result

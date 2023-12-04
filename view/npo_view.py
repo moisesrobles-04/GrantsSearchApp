@@ -3,6 +3,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
+from kivy.graphics import Color
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
@@ -36,13 +37,19 @@ class NpoWindow(Screen):
     # Update dropdown each time you enter the screen. After creating a new value
     def on_pre_enter(self, *args):
         if self.reset_value:
-            self.ids.name_labels.text = "Which NPO are you looking for?"
-            self.ids.NPO_dropdown.text = "Select NPOs"
-            self.ids.NPO_dropdown.values = self.dropdown()
+            self.reset_data()
 
     # Activate reset; on_enter fails when opening app
     def on_leave(self, *args):
         self.reset_value = True
+
+    # Reset values
+    def reset_data(self):
+        # self.manager.get_screen("update_npo").ids.boxes.clear_widgets()
+        # self.manager.get_screen("update_npo").ids.boxes.canvas.children[0].children[0].rgba = [0, 0, 0, 0]
+        self.ids.name_labels.text = "Which NPO are you looking for?"
+        self.ids.NPO_dropdown.text = "Select NPOs"
+        self.ids.NPO_dropdown.values = self.dropdown()
 
     # Get all NPOs and update dropdown
     def dropdown(self):
@@ -83,11 +90,15 @@ class NpoUpdateWindow(Screen):
 
     # When entering page clear widget and create labels and checklist
     def on_pre_enter(self, *args):
-        self.ids.boxes.clear_widgets()
+        if not self.reenter:
+            self.reset_data()
+
         elements = self.ids.boxes
         global npo_id
         self.npocat = npocatController().get_npocat_by_npoid(npo_id)
         self.widgets_creation()
+
+        self.reenter = True
 
     # If there is no data in the database, skip activate
         if type(self.npocat) != dict:
@@ -100,6 +111,7 @@ class NpoUpdateWindow(Screen):
 
     # Reset labels and checkboxes and update npocat table
     def on_leave(self, *args):
+        self.reenter = False
         self.check_list()
         self.ids.boxes.clear_widgets()
 
@@ -131,23 +143,30 @@ class NpoUpdateWindow(Screen):
     def check_list(self):
         global npo_id
         temp = self.ids.boxes
-        check_list = npocatController().get_npocat_by_npoid(npo_id)
 
-        if type(check_list) != dict:
-            for i in range(0, len(temp.children) - 1, 2):
-                box = temp.children[i]
-                l = temp.children[i + 1]
-                if isinstance(l, Label) and isinstance(box, CheckBox):
+        for i in range(0, len(temp.children) - 1, 2):
+            box = temp.children[i]
+            l = temp.children[i + 1]
+            if isinstance(l, Label) and isinstance(box, CheckBox):
 
-                    cat = categoryController().get_category_by_name(l.text)
-                    npo_dict = {"n_id": npo_id, "c_id": cat['c_id']}
+                cat = categoryController().get_category_by_name(l.text)
+                npo_dict = {"n_id": npo_id, "c_id": cat['c_id']}
 
+                if type(self.npocat) == dict:
+                    if box.active:
+                        npocatController().create_npocat(npo_dict)
+                else:
                     if box.active and not any(dictionary.get('category') == l.text for dictionary in self.npocat):
                         npocatController().create_npocat(npo_dict)
                     elif not box.active and any(dictionary.get('category') == l.text for dictionary in self.npocat):
                         npocatController().delete_npocat(npo_dict)
-                    else:
-                        continue
+
+
+    # Reset values
+    def reset_data(self):
+        self.ids.name_input.text = ""
+        self.ids.boxes.clear_widgets()
+    #     self.ids.boxes.canvas.children[0].children[0].rgba = [0, 0.75, 0, 1]
 
     # Update the name of the NPO
     def change_name(self):
@@ -157,21 +176,9 @@ class NpoUpdateWindow(Screen):
             if npo["n_id"] == -1:
                 self.ids.name_labels.text = npo["name"]
             else:
-                new_name = self.ids.input_label.text
+                new_name = self.ids.name_input.text
                 npo["name"] = new_name
                 NpoPop(npo, "Update", name).open_pop()
-
-    # MUST FINISH FUNCTION (Update NPO's npocat)
-    def update_npo(self):
-        name = self.ids.NPO_dropdown.text
-        if name != "":
-            npo = npoController().get_npo_by_name(name)
-            if npo["n_id"] == -1:
-                self.ids.name_labels.text = npo["name"]
-            else:
-                global npo_id
-                npo_id = npo["n_id"]
-                self.ids.name_labels.text = f'The #{npo["n_id"]} NPO is {npo["name"]}'
 
 
 # Create Window
@@ -224,7 +231,7 @@ class NpoPop(FloatLayout):
         self.popup.open()
 
     def close_pop(self):
-        self.popup.dismiss()
+        self.popup.dismiss(force=True)
 
     def message(self, name):
         # Create Messages
