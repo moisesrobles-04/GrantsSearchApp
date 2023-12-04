@@ -1,11 +1,8 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
-from kivy.uix.button import Button
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
-from kivy.clock import Clock
-import time
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
@@ -42,7 +39,6 @@ class NpoWindow(Screen):
             self.ids.name_labels.text = "Which NPO are you looking for?"
             self.ids.NPO_dropdown.text = "Select NPOs"
             self.ids.NPO_dropdown.values = self.dropdown()
-            # self.manager.get_screen("update_npo").remove_widget(self.manager.get_screen("update_npo").btn)
 
     # Activate reset; on_enter fails when opening app
     def on_leave(self, *args):
@@ -69,8 +65,8 @@ class NpoWindow(Screen):
             if npo["n_id"] == -1:
                 self.ids.name_labels.text = npo["name"]
 
+            # If the name is in the database enter page
             else:
-                # If the name is in the database enter page
                 global npo_id
                 npo_id = npo["n_id"]
 
@@ -85,12 +81,15 @@ class NpoWindow(Screen):
 # Update Window
 class NpoUpdateWindow(Screen):
 
+    # When entering page clear widget and create labels and checklist
     def on_pre_enter(self, *args):
+        self.ids.boxes.clear_widgets()
         elements = self.ids.boxes
         global npo_id
         self.npocat = npocatController().get_npocat_by_npoid(npo_id)
         self.widgets_creation()
 
+    # If there is no data in the database, skip activate
         if type(self.npocat) != dict:
             for i in range(0, len(elements.children) - 1, 2):
                 labels = elements.children[i + 1]
@@ -101,8 +100,8 @@ class NpoUpdateWindow(Screen):
 
     # Reset labels and checkboxes and update npocat table
     def on_leave(self, *args):
-        self.ids.boxes.clear_widgets()
         self.check_list()
+        self.ids.boxes.clear_widgets()
 
     # Create labels and checkboxes
     def widgets_creation(self):
