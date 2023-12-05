@@ -1,3 +1,5 @@
+#: import platform sys.platform
+
 <Button>
     font_size: 32
     background_normal: ''
@@ -19,8 +21,8 @@
 
 <SpinnerOption>:
     background_color: 0.2,0.2,0.2,1
-    padding: 20
-    font_size: 24
+    padding: 14
+    font_size: 32 if platform == 'darwin' else 14
     color: (1,0.5,0,1)
     text_size: self.width, None
 
@@ -80,6 +82,9 @@
                 text: "Select NPOs"
                 values: root.dropdown()
                 text_size: self.width, None
+
+                    #SpinnerOption:
+                     #   id: spt_opt
 
             GridLayout:
                 rows: 2

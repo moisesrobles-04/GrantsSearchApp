@@ -3,6 +3,9 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
+from kivy.clock import Clock
+from sys import platform
+
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
@@ -37,6 +40,12 @@ class NpoWindow(Screen):
     def on_pre_enter(self, *args):
         if self.reset_value:
             self.reset_data()
+
+    def set_size(self):
+        print("Worked")
+        pass
+
+    Clock.schedule_once(set_size, 5)
 
     # Activate reset; on_enter fails when opening app
     def on_leave(self, *args):

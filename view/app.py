@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
+from sys import platform
 
 import csv
 from controller.npocat_controller import npocatController
@@ -24,7 +25,12 @@ class GrantsApp(App):
 
 kv = Builder.load_file('main.kv')
 # Builder.load_file('npo.kv')
-Window.size = (700,700)
+
+if platform == 'darwin':
+    Window.size = (700,700)
+
+else:
+    Window.size = (800,800)
 
 if __name__ == '__main__':
     GrantsApp().run()
