@@ -113,8 +113,10 @@ class grantDAO():
                         where (status = 'Posted' or status = 'Forecasted')
                         and g.category Like ('%' || N.category || '%')
                         and agency not Like '%USAID%' and agency not Like '%DOD%'
-                        and agency not Like '%DOS%'
-                        and N.name Like ('%' || ? || '%') COLLATE NOCASE
+                        and agency not Like '%DOS%' and N.name Like ('%' || ? || '%') 
+                        and ((g.closeddate < Date(current_date, '6 months')
+                        and g.closeddate > Date(current_date, '1 months')) or g.closeddate= '2099-01-01')
+                        COLLATE NOCASE
                         """
             ex = (name,)
             cur.execute(query, ex)
@@ -139,7 +141,10 @@ class grantDAO():
                         From NPO Natural inner join npocategory natural inner join grants
                         where n_id Like ? and status = 'Posted' or status = 'Forecasted'
                         and agency not Like '%USAID%' and agency not Like '%DOD%'
-                        and agency not Like '%DOS%' COLLATE NOCASE"""
+                        and agency not Like '%DOS%'
+                        and ((g.closeddate < Date(current_date, '6 months')
+                        and g.closeddate > Date(current_date, '1 months')) or g.closeddate= '2099-01-01')
+                        COLLATE NOCASE"""
             ex = (n_id,)
             cur.execute(query, ex)
 

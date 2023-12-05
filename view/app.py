@@ -19,6 +19,27 @@ from view.grant_view import *
 class WindowManager(ScreenManager):
     pass
 
+# Class to choose path to save information
+class NpoFileWindow(Screen):
+    def selected(self, filename):
+        try:
+            self.path = filename[0]
+        except:
+            pass
+
+        finally:
+            if self.path != "":
+                with open("./data/path.csv", "w") as file:
+                    w = csv.writer(file)
+                    w.writerow([self.path])
+                    file.close()
+
+                self.close_window()
+
+    def close_window(self):
+        self.manager.current = "first"
+
+
 class GrantsApp(App):
     def build(self):
         return kv

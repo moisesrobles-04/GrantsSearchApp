@@ -3,15 +3,16 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
+from kivy.uix.filechooser import FileChooser
 
 import csv
 from sys import platform
+
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
 from controller.categories_controller import categoryController
 from controller.grant_controller import grantController
-npo_id = -1
 
 """
 
@@ -31,6 +32,8 @@ NPO Window Hierarchy:
                         |---- NpoPop
 """
 
+npo_id = -1
+path= ""
 
 # Defined our main window
 class NpoWindow(Screen):
@@ -38,6 +41,12 @@ class NpoWindow(Screen):
 
     # Update dropdown each time you enter the screen. After creating a new value
     def on_pre_enter(self, *args):
+        with open('./data/path.csv', 'r') as file:
+            r = csv.reader(file)
+            global path
+            path = r.__next__()
+            file.close()
+
         if self.reset_value:
             self.reset_data()
 
@@ -84,6 +93,10 @@ class NpoWindow(Screen):
         else:
             self.ids.name_labels.text = "No NPO selected"
 
+    # def get_grants(self):
+    #     path = filechooser.open_file(title="Pick a CSV file...")
+    #     print(path)
+
     def get_grants(self):
         name = self.ids.NPO_dropdown.text
         g = grantController().get_grant_by_NPOname(name)
@@ -92,7 +105,7 @@ class NpoWindow(Screen):
             return f'No result found'
 
         else:
-            with open("./data/Test.csv", "w") as file:
+            with open(path[0] + "/Test.csv", "w") as file:
                 w = csv.writer(file)
                 w.writerow(g[0].keys())
                 for elem in g:

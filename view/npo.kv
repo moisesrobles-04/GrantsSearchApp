@@ -52,9 +52,9 @@
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
-                text: "Categories"
+                text: "Save data"
                 on_press:
-                    app.root.current = "second"
+                    app.root.current = "file_npo"
                     root.manager.transition.direction = "left"
             Button:
                 size_hint: (0.2,0.2)
@@ -112,6 +112,55 @@
                 text: "Remove NPO"
                 on_release:
                     app.root.current = "delete_npo"
+
+<NpoFileWindow>:
+    name: "file_npo"
+    path: ""
+
+    GridLayout:
+        rows: 3
+        canvas.before:
+            Color:
+                rgba: 0,0,0,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        spacing: 15
+        size: root.width, root.height
+        pos: root.pos
+        size_hint: (None,None)
+
+        FileChooserIconView:
+            id: file
+            dirselect: True
+            #on_selection: root.selected(file.selection)
+
+        GridLayout:
+            cols: 2
+            padding: 10
+            size_hint: (None, None)
+            height: 300
+            width: root.width
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (1, 1, 1, 1)
+                text: "Back"
+                color: (0,0,0,1)
+                on_press:
+                    root.close_window()
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (1, 1, 1, 1)
+                text: "Select Folder"
+                color: (0,0,0,1)
+                on_press:
+                    root.selected(file.selection)
+
 
 <NpoUpdateWindow>:
     name: "update_npo"
