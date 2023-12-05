@@ -5,6 +5,7 @@ from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
 
 import csv
+from sys import platform
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
@@ -132,21 +133,34 @@ class NpoUpdateWindow(Screen):
     # Create labels and checkboxes
     def widgets_creation(self):
         cat_list = categoryController().get_all_categories()
+        if platform == "darwin":
+            font_size = 23
+            width = 550
+            height = 50
+            padding = 35
+            text_size = (450,0)
+        else:
+            font_size = 14
+            width = 455
+            height = 35
+            padding = 15
+            text_size = (310,0)
+
         for cat in cat_list:
             l_name = cat['category']
             self.label = Label(text=l_name,
-                               font_size=23,
+                               font_size=font_size,
                                halign="left",
                                valign="center",
-                               text_size=(450, 0),
+                               text_size=text_size,
                                size_hint=(5, None),
-                               padding=35,
-                               width=550,
-                               height=50,
+                               padding=padding,
+                               width=width,
+                               height=height,
                                pos=(0, 0))
 
             c_name = "check_" + cat['category']
-            self.check = CheckBox()
+            self.check = CheckBox(color= [0.1,0.1,0.1,1])
 
             self.ids["box_" + l_name] = self.label
             self.ids[c_name] = self.check

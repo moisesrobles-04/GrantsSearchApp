@@ -83,9 +83,6 @@
                 values: root.dropdown()
                 text_size: self.width, None
 
-                    #SpinnerOption:
-                     #   id: spt_opt
-
             GridLayout:
                 rows: 2
                 padding: 10
@@ -102,7 +99,6 @@
                     on_release:
                         root.get_grants()
                         root.manager.transition.direction= "left"
-
 
         GridLayout:
             cols: 2
@@ -133,7 +129,7 @@
             size_hint_x: None
             width: 620
             size_hint_y: None
-            height: 50
+            height: 50 if platform=='darwin' else 25
             spacing: 10
 
             Button:
@@ -167,6 +163,7 @@
             cols: 3
             padding: 10
 
+
             Label:
                 id: name_labels
                 text: ""
@@ -187,12 +184,12 @@
         GridLayout:
             id: boxes
             cols: 4
-            padding: 4
+            padding: 2
             size_hint_x: None
-            width: 1300
+            width: 1300 if platform == 'darwin' else 700
             size_hint_y: None
-            height: 900
-            spacing: 10
+            height: 900 if platform == 'darwin' else 480
+            spacing: 10 if platform == 'darwin' else 2
 
 <NpoCreateWindow>:
     name: "create_npo"
