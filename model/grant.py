@@ -49,11 +49,11 @@ class grantDAO():
             if self.db.connection is not None:
                 self.db.close()
 
-    def getGrants(self, page):
+    def getGrants(self):
         try:
             cur = self.db.connection.cursor()
-            query = """Select * From grants LIMIT 20 OFFSET 20*?"""
-            cur.execute(query, (page,))
+            query = """Select * From grants"""
+            cur.execute(query)
 
         except(Exception, sqlite3.Error) as error:
             print("Error executing getGrants operation", error)

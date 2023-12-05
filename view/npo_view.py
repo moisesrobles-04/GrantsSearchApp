@@ -3,9 +3,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
-from kivy.clock import Clock
-from sys import platform
 
+import csv
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
@@ -41,20 +40,12 @@ class NpoWindow(Screen):
         if self.reset_value:
             self.reset_data()
 
-    def set_size(self):
-        print("Worked")
-        pass
-
-    Clock.schedule_once(set_size, 5)
-
     # Activate reset; on_enter fails when opening app
     def on_leave(self, *args):
         self.reset_value = True
 
     # Reset values
     def reset_data(self):
-        # self.manager.get_screen("update_npo").ids.boxes.clear_widgets()
-        # self.manager.get_screen("update_npo").ids.boxes.canvas.children[0].children[0].rgba = [0, 0, 0, 0]
         self.ids.name_labels.text = "Which NPO are you looking for?"
         self.ids.NPO_dropdown.text = "Select NPOs"
         self.ids.NPO_dropdown.values = self.dropdown()
@@ -95,6 +86,17 @@ class NpoWindow(Screen):
     def get_grants(self):
         name = self.ids.NPO_dropdown.text
         g = grantController().get_grant_by_NPOname(name)
+        # g = grantController().get_all_grants()
+        if type(g) == dict:
+            return f'No result found'
+
+        else:
+            with open("./data/Test.csv", "w") as file:
+                w = csv.writer(file)
+                w.writerow(g[0].keys())
+                for elem in g:
+                    print(elem)
+                    w.writerow(elem.values())
 
 
 # Update Window
@@ -178,7 +180,6 @@ class NpoUpdateWindow(Screen):
     def reset_data(self):
         self.ids.name_input.text = ""
         self.ids.boxes.clear_widgets()
-    #     self.ids.boxes.canvas.children[0].children[0].rgba = [0, 0.75, 0, 1]
 
     # Update the name of the NPO
     def change_name(self):

@@ -21,9 +21,9 @@ class grantController:
     ================
     """
 
-    def get_all_grants(self, page):
+    def get_all_grants(self):
         dao = grantDAO()
-        cat_list = dao.getGrants(page)
+        cat_list = dao.getGrants()
         cats = [self.build_grant_map_dict(row) for row in cat_list]
         return cats
 
