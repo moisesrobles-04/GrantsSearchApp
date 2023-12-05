@@ -3,12 +3,11 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
-from kivy.graphics import Color
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
 from controller.categories_controller import categoryController
-
+from controller.grant_controller import grantController
 npo_id = -1
 
 """
@@ -83,6 +82,10 @@ class NpoWindow(Screen):
 
         else:
             self.ids.name_labels.text = "No NPO selected"
+
+    def get_grants(self):
+        name = self.ids.NPO_dropdown.text
+        g = grantController().get_grant_by_NPOname(name)
 
 
 # Update Window

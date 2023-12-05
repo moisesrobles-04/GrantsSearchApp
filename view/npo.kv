@@ -81,13 +81,23 @@
                 values: root.dropdown()
                 text_size: self.width, None
 
-            Button:
-                text: "Update NPO"
-                text_size: self.width, None
-                on_release:
-                    #app.root.current = root.press_npo()
-                    root.press_npo()
-                    root.manager.transition.direction= "left"
+            GridLayout:
+                rows: 2
+                padding: 10
+
+                Button:
+                    text: "Update NPO"
+                    text_size: self.width, None
+                    on_release:
+                        root.press_npo()
+                        root.manager.transition.direction= "left"
+                Button:
+                    text: "Download possible grants"
+                    text_size: self.width, None
+                    on_release:
+                        root.press_npo()
+                        root.manager.transition.direction= "left"
+
 
         GridLayout:
             cols: 2

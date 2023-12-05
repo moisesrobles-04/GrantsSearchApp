@@ -112,8 +112,10 @@ class grantDAO():
                             grants as g
                         where (status = 'Posted' or status = 'Forecasted')
                         and g.category Like ('%' || N.category || '%')
+                        and agency not Like '%USAID%' and agency not Like '%DOD%'
+                        and agency not Like '%DOS%'
                         and N.name Like ('%' || ? || '%') COLLATE NOCASE
-                        Limit 10;"""
+                        """
             ex = (name,)
             cur.execute(query, ex)
 
@@ -135,7 +137,9 @@ class grantDAO():
             query = """Select g_id, o_number, o_title, agency, status, posteddate,
                         closeddate, instrument, category, matching, awardceiling, awardfloor
                         From NPO Natural inner join npocategory natural inner join grants
-                        where n_id Like ? and status = 'Posted' or status = 'Forecasted' COLLATE NOCASE"""
+                        where n_id Like ? and status = 'Posted' or status = 'Forecasted'
+                        and agency not Like '%USAID%' and agency not Like '%DOD%'
+                        and agency not Like '%DOS%' COLLATE NOCASE"""
             ex = (n_id,)
             cur.execute(query, ex)
 
