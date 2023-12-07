@@ -2,10 +2,9 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
-from sys import platform
+import os.path
 
 import csv
-from controller.npocat_controller import npocatController
 
 from view.npo_view import *
 from view.cat_view import *
@@ -36,12 +35,27 @@ class NpoFileWindow(Screen):
 
                 self.close_window()
 
+    def select_db(self, filename):
+        try:
+            pass
+
+        except:
+            pass
+
+        finally:
+            pass
+
     def close_window(self):
         self.manager.current = "first"
 
 
 class GrantsApp(App):
     def build(self):
+
+        path_exist = os.path.isfile("./data/grants.db")
+        if path_exist:
+            print("Hello World")
+
         return kv
 
 kv = Builder.load_file('main.kv')
