@@ -52,21 +52,20 @@
             Button:
                 size_hint: (0.2,0.2)
                 font_size: 22
-                text: "Save data"
+                text: "Save CSV location"
+                on_press:
+                    root.manager.get_screen("file_npo").action = "grants"
+                    app.root.current = "file_npo"
+                    root.manager.transition.direction = "left"
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Database location"
                 on_press:
                     app.root.current = "file_npo"
                     root.manager.transition.direction = "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Grants"
-                on_release:
-                    app.root.current = "third"
-                    root.manager.transition.direction= "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Hello"
+
 
         GridLayout:
             cols: 3
@@ -132,6 +131,13 @@
         pos: root.pos
         size_hint: (None,None)
 
+        Label:
+            id: name_label
+            text: "Select Database" if root.action == "grants" else "Select Download Location"
+            text_size: (self.width, None)
+            size_hint: (None, None)
+            size: root.width, root.height/30
+
         FileChooserIconView:
             id: file
             dirselect: True
@@ -145,7 +151,7 @@
             cols: 2
             padding: 10
             size_hint: (None, None)
-            height: 300
+            height: 260
             width: root.width
 
             Button:
@@ -193,29 +199,10 @@
                 on_press:
                     app.root.current = "first"
                     root.manager.transition.direction = "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Categories"
-                on_press:
-                    app.root.current = "second"
-                    root.manager.transition.direction = "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Grants"
-                on_release:
-                    app.root.current = "third"
-                    root.manager.transition.direction= "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Hello"
 
         GridLayout:
             cols: 3
             padding: 10
-
 
             Label:
                 id: name_labels
@@ -270,24 +257,7 @@
                 on_press:
                     app.root.current = "first"
                     root.manager.transition.direction = "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Categories"
-                on_press:
-                    app.root.current = "second"
-                    root.manager.transition.direction = "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Grants"
-                on_release:
-                    app.root.current = "third"
-                    root.manager.transition.direction= "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Hello"
+
 
         GridLayout:
             cols: 3
@@ -342,24 +312,7 @@
                 on_press:
                     app.root.current = "first"
                     root.manager.transition.direction = "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Categories"
-                on_press:
-                    app.root.current = "second"
-                    root.manager.transition.direction = "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Grants"
-                on_release:
-                    app.root.current = "third"
-                    root.manager.transition.direction= "left"
-            Button:
-                size_hint: (0.2,0.2)
-                font_size: 22
-                text: "Hello"
+
 
         GridLayout:
             cols: 3

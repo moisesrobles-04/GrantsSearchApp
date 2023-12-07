@@ -1,3 +1,5 @@
+import datetime
+
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
@@ -40,32 +42,15 @@ class NpoWindow(Screen):
 
     # Update dropdown each time you enter the screen. After creating a new value
     def on_pre_enter(self, *args):
-        path_exist = os.path.isfile("./data/path.csv")
+        path_exist = os.path.isfile("./data/download_path.csv")
         if path_exist:
-            with open('./data/path.csv', 'r') as file:
+            with open('./data/download_path.csv', 'r') as file:
                 r = csv.reader(file)
                 global path
                 path = r.__next__()
                 file.close()
-        # else:
-        #     self.ma
-
 
         self.reset_data()
-
-    # def on_enter(self, *args):
-    #     grants_exist = os.path.isfile("./data/grant.csv")
-    #     if not grants_exist:
-    #         self.manager.get_screen("file_npo").action= "grant"
-    #         self.manager.current = "file_npo"
-    #
-    #     path_exist = os.path.isfile("./data/path.csv")
-    #     if path_exist:
-    #         with open('./data/path.csv', 'r') as file:
-    #             r = csv.reader(file)
-    #             global path
-    #             path = r.__next__()
-    #             file.close()
 
     # Reset values
     def reset_data(self):
@@ -114,12 +99,12 @@ class NpoWindow(Screen):
     def get_grants(self):
         name = self.ids.NPO_dropdown.text
         g = grantController().get_grant_by_NPOname(name)
-        # g = grantController().get_all_grants()
         if type(g) == dict:
             return f'No result found'
 
         else:
-            with open(path[0] + "/Test.csv", "w") as file:
+            file_name= path[0] + '\\' + name + "_" + str(datetime.date.today())
+            with open(file_name, "w") as file:
                 w = csv.writer(file)
                 w.writerow(g[0].keys())
                 for elem in g:

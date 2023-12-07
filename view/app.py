@@ -29,8 +29,8 @@ class NpoFileWindow(Screen):
 
     def on_pre_enter(self, *args):
         if not self.reenter:
-            grants_exist = os.path.isfile("./data/grants.csv")
-            exist = os.path.isfile("./data/path.csv")
+            grants_exist = os.path.isfile("./data/database_loc.csv")
+            exist = os.path.isfile("./data/download_path.csv")
             if not grants_exist:
                 self.action = "grant"
             else:
@@ -45,10 +45,10 @@ class NpoFileWindow(Screen):
         finally:
             if self.path != "":
                 if self.action == "grants":
-                    path_name = "./data/path.csv"
+                    path_name = "./data/download_path.csv"
 
                 else:
-                    path_name = "./data/grants.csv"
+                    path_name = "./data/database_loc.csv"
 
                 with open(path_name, "w") as file:
                     w = csv.writer(file)
@@ -62,8 +62,10 @@ class NpoFileWindow(Screen):
         if self.reenter:
             if type(self.clock_var) != str:
                 self.clock_var.cancel()
-        self.manager.current = "first"
-        self.reenter = True
+        if os.path.isfile("./data/database_loc.csv"):
+            self.manager.current = "first"
+            self.action = ""
+            self.reenter = True
 
 
 class GrantsApp(App):
