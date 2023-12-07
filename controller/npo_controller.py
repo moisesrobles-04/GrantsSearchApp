@@ -17,6 +17,8 @@ class npoController:
     def get_all_npos(self):
         dao = npoDAO()
         npo_list = dao.getNPO()
+        if type(npo_list)!= list:
+            return None
         npos = [self.build_npo_map_dict(row) for row in npo_list]
         return npos
 
@@ -50,8 +52,11 @@ class npoController:
         if npo_exist != None:
             return self.build_npo_map_dict([-1, f"NPO {npo_exist[1]} already exist"])
         dao = npoDAO()
-        n_id = dao.createNPO(json["name"])
-        npo= [n_id, json["name"]]
+        row = dao.createNPO(json["name"])
+        if row<1:
+            return f'NPO {json["name"]} was not created'
+        dao = npoDAO()
+        npo = dao.getNPO_byName(json['name'])
         npo_dict = self.build_npo_map_dict(npo)
         return npo_dict
 

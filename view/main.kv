@@ -1,12 +1,19 @@
-#: include view/grants.kv
 #: include view/npo.kv
+#: include view/custom.kv
 #: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import os.path os.path
 
 WindowManager:
     transition: NoTransition()
     id: screen_manager
 
+    #current: "first" if os.path.isfile("./data/path.csv") else "file_npo"
     #NPO Windows
+
+    NpoFileWindow:
+        id: npo_fifth_screen
+        name: "file_npo"
+        manager: screen_manager
     NpoWindow:
         id: first_screen
         manager: screen_manager
@@ -18,7 +25,4 @@ WindowManager:
         manager: screen_manager
     NpoUpdateWindow:
         id: npo_fourth_screen
-        manager: screen_manager
-    NpoFileWindow:
-        id: npo_fifth_screen
         manager: screen_manager

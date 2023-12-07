@@ -10,19 +10,17 @@ class npoDAO():
     def createNPO(self, name):
         try:
             cur = self.db.connection.cursor()
-            query = """Insert into NPO (name) values (?)
-                    returning n_id"""
+            query = """Insert into NPO (name) values (?)"""
             ex = (name,)
             cur.execute(query, ex)
-            result = cur.fetchone()[0]
-            cur.close()
             self.db.connection.commit()
-
         except(Exception, sqlite3.Error) as error:
             print("Error executing createNPO operation", error)
             self.db.connection = None
         finally:
             if self.db.connection is not None:
+                result = cur.rowcount
+                cur.close()
                 self.db.close()
                 return result
 

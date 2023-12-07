@@ -3,16 +3,16 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
-from kivy.uix.filechooser import FileChooser
 
 import csv
 from sys import platform
-
+import os.path
 
 from controller.npo_controller import npoController
 from controller.npocat_controller import npocatController
 from controller.categories_controller import categoryController
 from controller.grant_controller import grantController
+from data import *
 
 """
 
@@ -37,22 +37,35 @@ path= ""
 
 # Defined our main window
 class NpoWindow(Screen):
-    reset_value = False
 
     # Update dropdown each time you enter the screen. After creating a new value
     def on_pre_enter(self, *args):
-        with open('./data/path.csv', 'r') as file:
-            r = csv.reader(file)
-            global path
-            path = r.__next__()
-            file.close()
+        path_exist = os.path.isfile("./data/path.csv")
+        if path_exist:
+            with open('./data/path.csv', 'r') as file:
+                r = csv.reader(file)
+                global path
+                path = r.__next__()
+                file.close()
+        # else:
+        #     self.ma
 
-        if self.reset_value:
-            self.reset_data()
 
-    # Activate reset; on_enter fails when opening app
-    def on_leave(self, *args):
-        self.reset_value = True
+        self.reset_data()
+
+    # def on_enter(self, *args):
+    #     grants_exist = os.path.isfile("./data/grant.csv")
+    #     if not grants_exist:
+    #         self.manager.get_screen("file_npo").action= "grant"
+    #         self.manager.current = "file_npo"
+    #
+    #     path_exist = os.path.isfile("./data/path.csv")
+    #     if path_exist:
+    #         with open('./data/path.csv', 'r') as file:
+    #             r = csv.reader(file)
+    #             global path
+    #             path = r.__next__()
+    #             file.close()
 
     # Reset values
     def reset_data(self):
@@ -64,8 +77,9 @@ class NpoWindow(Screen):
     def dropdown(self):
         n_list = npoController().get_all_npos()
         npos = []
-        for elem in n_list:
-            npos.append(elem["name"])
+        if n_list != None:
+            for elem in n_list:
+                npos.append(elem["name"])
         return npos
 
     def press_npo(self):
