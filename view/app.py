@@ -5,14 +5,7 @@ from kivy.uix.screenmanager import ScreenManager
 from kivy.clock import Clock
 import os.path
 
-import csv
-
 from view.npo_view import *
-
-
-# class result():
-#     with open("test.csv", "w") as file:
-#         write = csv.writer(file)
 
 
 class WindowManager(ScreenManager):
@@ -36,12 +29,14 @@ class NpoFileWindow(Screen):
                 self.action = "grants"
             else:
                 self.clock_var = Clock.schedule_interval(self.close_window, 0.1)
+        # Update label
         if self.path_info:
             self.getpath()
 
     def selected(self, filename):
         try:
             self.path = filename[0]
+
         except:
             pass
 
@@ -61,6 +56,7 @@ class NpoFileWindow(Screen):
                 self.action = ""
                 self.close_window()
 
+    # Name path's label
     def getpath(self):
         if self.action == "grants":
             grants_exist = os.path.isfile("./data/database_loc.csv")
@@ -103,7 +99,6 @@ kv = Builder.load_file('main.kv')
 
 if platform == 'darwin':
     Window.size = (700, 700)
-
 else:
     Window.size = (800, 800)
 

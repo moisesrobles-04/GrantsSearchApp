@@ -62,7 +62,7 @@ class NpoWindow(Screen):
     def dropdown(self):
         n_list = npoController().get_all_npos()
         npos = []
-        if n_list != None:
+        if n_list is not None:
             for elem in n_list:
                 npos.append(elem["name"])
         return npos
@@ -92,10 +92,7 @@ class NpoWindow(Screen):
         else:
             self.ids.name_labels.text = "No NPO selected"
 
-    # def get_grants(self):
-    #     path = filechooser.open_file(title="Pick a CSV file...")
-    #     print(path)
-
+    # Create csv file with grants' data
     def get_grants(self):
         name = self.ids.NPO_dropdown.text
         g = grantController().get_grant_by_NPOname(name)
@@ -316,17 +313,17 @@ class NpoPop(FloatLayout):
     # Crud operations for the pop-up window
     def crud_action(self, name):
         if self.action == "Create":
-            dict = {"name": name}
-            create = npoController().create_npo(dict)
+            json_dict = {"name": name}
+            create = npoController().create_npo(json_dict)
             return create
 
         elif self.action == "Delete":
-            dict = {"name": name}
-            delete = npoController().delete_npo(dict)
+            json_dict = {"name": name}
+            delete = npoController().delete_npo(json_dict)
             return delete
 
         elif self.action == "Update":
             global npo_id
-            dict = {"n_id": npo_id, "name": name}
-            update = npoController().update_npo(dict)
+            json_dict = {"n_id": npo_id, "name": name}
+            update = npoController().update_npo(json_dict)
             return update
