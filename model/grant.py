@@ -111,12 +111,12 @@ class grantDAO():
                         From (NPO Natural inner join npocategory natural inner join categories) as N,
                             grants as g
                         where (status = 'Posted' or status = 'Forecasted')
-                        and g.category Like ('%' || N.category || '%')
+                        and (g.category Like ('%' || N.category || '%') or g.category like '%Category of Funding Activity:%')
                         and agency not Like '%USAID%' and agency not Like '%DOD%'
-                        and agency not Like '%DOS%' and N.name Like ('%' || ? || '%') 
+                        and agency not Like '%DOS%' and N.name Like ('%' || ? || '%')
                         and ((g.closeddate < Date(current_date, '6 months')
                         and g.closeddate > Date(current_date, '1 months')) or g.closeddate= '2099-01-01')
-                        COLLATE NOCASE
+                        COLLATE NOCASE order by status desc, matching, g_id
                         """
             ex = (name,)
             cur.execute(query, ex)
@@ -137,14 +137,17 @@ class grantDAO():
         try:
             cur = self.db.connection.cursor()
             query = """Select g_id, o_number, o_title, agency, status, posteddate,
-                        closeddate, instrument, category, matching, awardceiling, awardfloor
-                        From NPO Natural inner join npocategory natural inner join grants
-                        where n_id Like ? and status = 'Posted' or status = 'Forecasted'
+                        closeddate, instrument, g.category, matching, awardceiling, awardfloor
+                        From (NPO Natural inner join npocategory natural inner join categories) as N,
+                            grants as g
+                        where (status = 'Posted' or status = 'Forecasted')
+                        and (g.category Like ('%' || N.category || '%') or g.category like '%Category of Funding Activity:%')
                         and agency not Like '%USAID%' and agency not Like '%DOD%'
-                        and agency not Like '%DOS%'
+                        and agency not Like '%DOS%' and N.n_id = ?
                         and ((g.closeddate < Date(current_date, '6 months')
                         and g.closeddate > Date(current_date, '1 months')) or g.closeddate= '2099-01-01')
-                        COLLATE NOCASE"""
+                        COLLATE NOCASE order by status desc, matching, g_id
+                        """
             ex = (n_id,)
             cur.execute(query, ex)
 
