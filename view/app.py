@@ -22,19 +22,22 @@ class WindowManager(ScreenManager):
 # Class to choose path to save information
 class NpoFileWindow(Screen):
     reenter = False
+    path_info = False
 
     def __init__(self, **kw):
         super().__init__(**kw)
         self.clock_var = ""
 
     def on_pre_enter(self, *args):
+        # If it is first time entering app check if database file path exist
         if not self.reenter:
             grants_exist = os.path.isfile("./data/database_loc.csv")
-            exist = os.path.isfile("./data/download_path.csv")
             if not grants_exist:
-                self.action = "grant"
+                self.action = "grants"
             else:
                 self.clock_var = Clock.schedule_interval(self.close_window, 0.1)
+        if self.path_info:
+            self.getpath()
 
     def selected(self, filename):
         try:
@@ -58,6 +61,28 @@ class NpoFileWindow(Screen):
                 self.action = ""
                 self.close_window()
 
+    def getpath(self):
+        if self.action == "grants":
+            grants_exist = os.path.isfile("./data/database_loc.csv")
+            if not grants_exist:
+                self.ids.path_id.text = "Database path has not been selected"
+            else:
+                with open("./data/database_loc.csv", 'r') as f:
+                    read = csv.reader(f)
+                    path = read.__next__()
+                    f.close()
+                    self.ids.path_id.text = f'The database path is {path[0]}'
+        else:
+            download_exist = os.path.isfile("./data/download_path.csv")
+            if not download_exist:
+                self.ids.path_id.text = 'No download path selected'
+            else:
+                with open("./data/download_path.csv", 'r') as f:
+                    read = csv.reader(f)
+                    path = read.__next__()
+                    f.close()
+                    self.ids.path_id.text = f'The download path is {path[0]}'
+
     def close_window(self, *args):
         if self.reenter:
             if type(self.clock_var) != str:
@@ -66,6 +91,7 @@ class NpoFileWindow(Screen):
             self.manager.current = "first"
             self.action = ""
             self.reenter = True
+            self.path_info = True
 
 
 class GrantsApp(App):

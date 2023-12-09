@@ -116,9 +116,8 @@
     name: "file_npo"
     path: ""
     action: ""
-
     GridLayout:
-        rows: 3
+        rows: 4
         canvas.before:
             Color:
                 rgba: 0,0,0,1
@@ -134,18 +133,26 @@
         Label:
             id: name_label
             text: "Select Database" if root.action == "grants" else "Select Download Location"
-            text_size: (self.width, None)
-            size_hint: (None, None)
-            size: root.width, root.height/30
+            text_size: (root.width, None)
+            size_hint: (self.width, None)
+            size: root.width, root.height/24
+            font_size: self.height
 
         FileChooserIconView:
             id: file
             dirselect: True
             size_hint: (None, None)
-            height: root.height*2/3-50
+            height: root.height*2/3-90
             width: root.width
             font_size: 10
-            #on_selection: root.selected(file.selection)
+
+        Label:
+            id: path_id
+            text: ""
+            size_hint: (self.width, None)
+            text_size: (root.width, None)
+            size: root.width, root.height/48
+            font_size: self.height
 
         GridLayout:
             cols: 2
