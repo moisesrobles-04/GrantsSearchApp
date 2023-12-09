@@ -103,7 +103,7 @@ class NpoWindow(Screen):
             return f'No result found'
 
         else:
-            file_name= path[0] + '\\' + name + "_" + str(datetime.date.today())
+            file_name= path[0] + '\\' + name + "_" + str(datetime.date.today()) + ".csv"
             with open(file_name, "w") as file:
                 w = csv.writer(file)
                 w.writerow(g[0].keys())
