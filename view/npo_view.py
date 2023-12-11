@@ -42,9 +42,9 @@ class NpoWindow(Screen):
 
     # Update dropdown each time you enter the screen. After creating a new value
     def on_pre_enter(self, *args):
-        path_exist = os.path.isfile("./data/download_path.csv")
+        path_exist = os.path.isfile("data/download_path.csv")
         if path_exist:
-            with open('./data/download_path.csv', 'r') as file:
+            with open('data/download_path.csv', 'r') as file:
                 r = csv.reader(file)
                 global path
                 path = r.__next__()
