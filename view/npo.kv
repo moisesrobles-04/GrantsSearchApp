@@ -132,7 +132,7 @@
 
         Label:
             id: name_label
-            text: "Select Database" if root.action == "grants" else "Select Download Location"
+            text: "Select Database" if root.action != "grants" else "Select Download Location"
             text_size: (root.width, None)
             size_hint: (self.width, None)
             size: root.width, root.height/24

@@ -26,7 +26,8 @@ class NpoFileWindow(Screen):
         if not self.reenter:
             grants_exist = os.path.isfile("./data/database_loc.csv")
             if not grants_exist:
-                self.action = "grants"
+                self.action = ""
+
             else:
                 self.clock_var = Clock.schedule_interval(self.close_window, 0.1)
         # Update label
@@ -42,23 +43,34 @@ class NpoFileWindow(Screen):
 
         finally:
             if self.path != "":
-                if self.action == "grants":
-                    path_name = "./data/download_path.csv"
+                if self.action != "grants":
+                    path_name = "./data/database_loc.csv"
 
                 else:
-                    path_name = "./data/database_loc.csv"
+                    path_name = "./data/download_path.csv"
 
                 with open(path_name, "w") as file:
                     w = csv.writer(file)
                     w.writerow([self.path])
                     file.close()
 
+                # When opened for the first time download path will be the same as db path
+                path_name = "./data/download_path.csv"
+                exist = os.path.isfile(path_name)
+                if not exist:
+                    temp_path = self.path.split("grants.db")
+                    temporary_loc = temp_path[0]
+                    with open(path_name, "w") as f:
+                        w = csv.writer(f)
+                        w.writerow([temporary_loc])
+                        f.close()
+
                 self.action = ""
                 self.close_window()
 
     # Name path's label
     def getpath(self):
-        if self.action == "grants":
+        if self.action != "grants":
             grants_exist = os.path.isfile("./data/database_loc.csv")
             if not grants_exist:
                 self.ids.path_id.text = "Database path has not been selected"
