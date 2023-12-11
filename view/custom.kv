@@ -29,7 +29,7 @@
         halign: 'center'
         shorten: True
         size: ('240dp', '32dp') if platform != 'darwin' else ('100dp', '16dp')
-        font_size: 16
+        font_size: 18 if platform !='darwin' else 22
         pos: (root.x-69, root.y + dp(16))  if platform != 'darwin' else (root.x, root.y + dp(16))
 
     Label:
