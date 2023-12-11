@@ -42,9 +42,9 @@ class NpoWindow(Screen):
 
     # Update dropdown each time you enter the screen. After creating a new value
     def on_pre_enter(self, *args):
-        path_exist = os.path.isfile("data/download_path.csv")
+        path_exist = os.path.isfile("./download_path.csv")
         if path_exist:
-            with open('data/download_path.csv', 'r') as file:
+            with open('./download_path.csv', 'r') as file:
                 r = csv.reader(file)
                 global path
                 path = r.__next__()
@@ -100,7 +100,11 @@ class NpoWindow(Screen):
             return f'No result found'
 
         else:
-            file_name= path[0] + '\\' + name + "_" + str(datetime.date.today()) + ".csv"
+            if platform == 'darwin':
+                file_name= path[0] + '/' + name + "_" + str(datetime.date.today()) + ".csv"
+            else:
+                file_name = path[0] + '\\' + name + "_" + str(datetime.date.today()) + ".csv"
+
             with open(file_name, "w") as file:
                 w = csv.writer(file)
                 w.writerow(g[0].keys())
