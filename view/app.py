@@ -6,6 +6,7 @@ from kivy.clock import Clock
 import os.path
 
 from view.npo_view import *
+import view
 
 
 class WindowManager(ScreenManager):
@@ -90,12 +91,11 @@ class NpoFileWindow(Screen):
             self.path_info = True
 
 
+# kv = Builder.load_file(r'grants.kv')
+
 class GrantsApp(App):
     def build(self):
-        return kv
-
-
-kv = Builder.load_file('main.kv')
+        return
 
 if platform == 'darwin':
     Window.size = (700, 700)

@@ -1,0 +1,434 @@
+#: include view/npo.kv
+#: include view/custom.kv
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import os.path os.path
+
+WindowManager:
+    transition: NoTransition()
+    id: screen_manager
+
+    #NPO Windows
+
+    NpoFileWindow:
+        id: npo_fifth_screen
+        name: "file_npo"
+        manager: screen_manager
+    NpoWindow:
+        id: first_screen
+        manager: screen_manager
+    NpoCreateWindow:
+        id: npo_second_screen
+        manager: screen_manager
+    NpoDeleteWindow:
+        id: npo_third_screen
+        manager: screen_manager
+    NpoUpdateWindow:
+        id: npo_fourth_screen
+        manager: screen_manager
+
+#: import platform sys.platform
+
+<Button>
+    font_size: 32
+    background_normal: ''
+    color: 0, 0.75, 0, 1
+    halign: "center"
+    #background_color: (0,0.75,0,1)
+
+<Label>
+    font_size: 28
+
+<GridLayout>
+    spacing: 15
+    canvas.before:
+        Color:
+            rgba: 0,0.75,0,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<SpinnerOption>:
+    background_color: 0.2,0.2,0.2,1
+    padding: 14
+    font_size: 27 if platform == 'darwin' else 14
+    color: (1,0.5,0,1)
+    text_size: self.width, None
+
+<NpoWindow>:
+    name: "first"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        padding: 50
+        spacing: 20
+
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (0, 0, 1, 1)
+                text: "NPOs"
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Save CSV location"
+                on_press:
+                    root.manager.get_screen("file_npo").action = "grants"
+                    app.root.current = "file_npo"
+                    root.manager.transition.direction = "left"
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                text: "Database location"
+                on_press:
+                    app.root.current = "file_npo"
+                    root.manager.transition.direction = "left"
+
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Label:
+                id: name_labels
+                text: "Which NPO are you looking for?"
+                text_size: self.width, None
+
+            Spinner:
+                id: NPO_dropdown
+                text: "Select NPOs"
+                values: root.dropdown()
+                text_size: self.width, None
+
+            GridLayout:
+                rows: 2
+                padding: 10
+
+                Button:
+                    text: "Update NPO"
+                    text_size: self.width, None
+                    on_release:
+                        root.press_npo()
+                        root.manager.transition.direction= "left"
+                Button:
+                    text: "Download possible grants"
+                    text_size: self.width, None
+                    on_release:
+                        root.get_grants()
+                        root.manager.transition.direction= "left"
+
+        GridLayout:
+            cols: 2
+            padding: 10
+            Button:
+                text: "Add NPO"
+                on_release:
+                    app.root.current = "create_npo"
+
+            Button:
+                text: "Remove NPO"
+                on_release:
+                    app.root.current = "delete_npo"
+
+<NpoFileWindow>:
+    name: "file_npo"
+    path: ""
+    action: ""
+    GridLayout:
+        rows: 4
+        canvas.before:
+            Color:
+                rgba: 0,0,0,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        spacing: 15
+        size: root.width, root.height
+        pos: root.pos
+        size_hint: (None,None)
+
+        Label:
+            id: name_label
+            text: "Select Database" if root.action == "grants" else "Select Download Location"
+            text_size: (root.width, None)
+            size_hint: (self.width, None)
+            size: root.width, root.height/24
+            font_size: self.height
+
+        FileChooserIconView:
+            id: file
+            dirselect: True
+            size_hint: (None, None)
+            height: root.height*2/3-90
+            width: root.width
+            font_size: 10
+
+        Label:
+            id: path_id
+            text: ""
+            size_hint: (self.width, None)
+            text_size: (root.width, None)
+            size: root.width, root.height/48
+            font_size: self.height
+
+        GridLayout:
+            cols: 2
+            padding: 10
+            size_hint: (None, None)
+            height: 260
+            width: root.width
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (1, 1, 1, 1)
+                text: "Back"
+                color: (0,0,0,1)
+                on_press:
+                    root.close_window()
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (1, 1, 1, 1)
+                text: "Select Folder"
+                color: (0,0,0,1)
+                on_press:
+                    root.selected(file.selection)
+
+<NpoUpdateWindow>:
+    name: "update_npo"
+    reenter: False
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        padding: 50
+        spacing: 20
+
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50 if platform=='darwin' else 25
+            spacing: 10
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (0, 0, 1, 1)
+                text: "Back"
+                on_press:
+                    app.root.current = "first"
+                    root.manager.transition.direction = "left"
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Label:
+                id: name_labels
+                text: ""
+                text_size: self.width, self.height
+
+            TextInput:
+                id: name_input
+                multiline: False
+                text_size: self.width, None
+
+            Button:
+                text: "Update NPO"
+                text_size: self.width, None
+                on_release:
+                    app.root.current = root.change_name()
+                    root.manager.transition.direction= "left"
+
+        GridLayout:
+            id: boxes
+            cols: 4
+            padding: 2
+            size_hint_x: None
+            width: 1300 if platform == 'darwin' else 700
+            size_hint_y: None
+            height: 900 if platform == 'darwin' else 480
+            spacing: 10 if platform == 'darwin' else 2
+
+<NpoCreateWindow>:
+    name: "create_npo"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        padding: 50
+        spacing: 20
+
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (0, 0, 1, 1)
+                text: "Back"
+                on_press:
+                    app.root.current = "first"
+                    root.manager.transition.direction = "left"
+
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Label:
+                id: name_labels
+                text: "Write NPOs Name:"
+                text_size: self.width, None
+                font_size: 64
+
+            TextInput:
+                id: name_input
+                multiline: False
+
+            Button:
+                text: "Create NPO"
+                text_size: self.width, None
+                font_size: 70
+                color: 0, 0.5, 0, 1
+                on_release:
+                    app.root.current = root.add_npo()
+                    root.manager.transition.direction= "left"
+
+        Label:
+            text: ""
+
+
+<NpoDeleteWindow>:
+    name: "delete_npo"
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        padding: 50
+        spacing: 20
+
+        GridLayout:
+            cols: 4
+            size_hint_x: None
+            width: 620
+            size_hint_y: None
+            height: 50
+            spacing: 10
+
+            Button:
+                size_hint: (0.2,0.2)
+                font_size: 22
+                background_color: (0, 0, 1, 1)
+                text: "Back"
+                on_press:
+                    app.root.current = "first"
+                    root.manager.transition.direction = "left"
+
+
+        GridLayout:
+            cols: 3
+            padding: 10
+
+            Label:
+                id: name_labels
+                text: "Select NPO to delete:"
+                text_size: self.width, None
+                font_size: 64
+
+            Spinner:
+                id: NPO_dropdown
+                text: "NPOs"
+                values: root.manager.get_screen("first").ids.NPO_dropdown.values
+                text_size: self.width, None
+
+            Button:
+                text: "Delete NPO"
+                text_size: self.width, None
+                font_size: 70
+                color: 0, 0.5, 0, 1
+                on_release:
+                    if root.ids.NPO_dropdown!= "NPOs": app.root.current = root.remove_npo()
+                    root.manager.transition.direction= "left"
+
+        Label:
+            text: ""
+
+<NpoPop>:
+    name: "npo_pop"
+    npo_name: ""
+
+    canvas.before:
+        Color:
+            rgba: 0,0,0,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    Label:
+        id: name_label
+        text: "You pressed the button"
+        size_hint: 0.6, 0.2
+        text_size: self.width, None
+        pos_hint: {"x":0.2, "top":1}
+
+    GridLayout:
+        cols: 2
+        size_hint: None, None
+        pos_hint: {"x":0, "y":0}
+        width: 620
+        height: 80
+        spacing: 10
+        padding: 5
+
+        Button:
+            id: confirm_button
+            color: 0,0.5,0,1
+            text: "Confirm"
+            size_hint: 0.9, 0.2
+            pos_hint: {"x":0.1, "y":0.1}
+            on_release:
+                if root.npo_name != "None": root.crud_action(root.npo_name)
+                if root.npo_name != "None" and root.action == "Create": app.root.current = "create_npo"
+                if root.npo_name != "None" and root.action == "Update": app.root.current = "update_npo"
+                if root.npo_name != "None" and root.action == "Delete": app.root.current = "delete_npo"
+                if root.npo_name != "None": app.root.current = "first"
+                root.close_pop()
+
+        Button:
+            id: cancel_button
+            background_color: (0.75,0,0,1)
+            color: 1,1,1,1
+            size_hint: 0.8, 0.2
+            pos_hint: {"x":0.3, "y":0.1}
+            text: "Cancel"
+            on_release:
+                root.close_pop()
+                if root.action == "Update": app.root.get_screen("update_npo").reenter= False
+                if root.action == "Create": app.root.current = "create_npo"
+                elif root.action == "Update": app.root.current = "update_npo"
+                elif root.action == "Delete": app.root.current = "delete_npo"
+
