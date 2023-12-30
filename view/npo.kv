@@ -362,7 +362,6 @@
 
     Label:
         id: name_label
-        text: "You pressed the button"
         size_hint: 0.6, 0.2
         text_size: self.width, None
         pos_hint: {"x":0.2, "top":1}
@@ -394,8 +393,8 @@
             id: cancel_button
             background_color: (0.75,0,0,1)
             color: 1,1,1,1
-            size_hint: 0.8, 0.2
-            pos_hint: {"x":0.3, "y":0.1}
+            size_hint: 0, 0.2
+            pos_hint: {"x":0.2, "y":0.1}
             text: "Cancel"
             on_release:
                 root.close_pop()
