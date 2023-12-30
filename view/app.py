@@ -107,7 +107,7 @@ class GrantsApp(App):
         return kv
 
 
-kv = Builder.load_file('view/main.kv')
+kv = Builder.load_file('view/grants.kv')
 
 if platform == 'darwin':
     Window.size = (700, 700)

@@ -160,7 +160,7 @@ WindowManager:
 
         Label:
             id: name_label
-            text: "Select Database" if root.action == "grants" else "Select Download Location"
+            text: "Select Download Location" if root.action == "grants" else "Select Database"
             text_size: (root.width, None)
             size_hint: (self.width, None)
             size: root.width, root.height/24
@@ -202,7 +202,7 @@ WindowManager:
                 size_hint: (0.2,0.2)
                 font_size: 22
                 background_color: (1, 1, 1, 1)
-                text: "Select Folder"
+                text: "Select Folder" if root.action == "grants" else "Select database file"
                 color: (0,0,0,1)
                 on_press:
                     root.selected(file.selection)
@@ -388,27 +388,20 @@ WindowManager:
             size: self.size
             pos: self.pos
 
-    Label:
-        id: name_label
-        text: "You pressed the button"
-        size_hint: 0.6, 0.2
-        text_size: self.width, None
-        pos_hint: {"x":0.2, "top":1}
-
     GridLayout:
         cols: 2
         size_hint: None, None
         pos_hint: {"x":0, "y":0}
-        width: 620
+        width: root.width
         height: 80
-        spacing: 10
-        padding: 5
+        spacing: 15
+        padding: 10
 
         Button:
             id: confirm_button
             color: 0,0.5,0,1
             text: "Confirm"
-            size_hint: 0.9, 0.2
+            size_hint: 0.8, 0.2
             pos_hint: {"x":0.1, "y":0.1}
             on_release:
                 if root.npo_name != "None": root.crud_action(root.npo_name)
@@ -423,7 +416,7 @@ WindowManager:
             background_color: (0.75,0,0,1)
             color: 1,1,1,1
             size_hint: 0.8, 0.2
-            pos_hint: {"x":0.3, "y":0.1}
+            pos_hint: {"x":0.1, "y":0.1}
             text: "Cancel"
             on_release:
                 root.close_pop()
