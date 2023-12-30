@@ -1,3 +1,31 @@
+#: include view/npo.kv
+#: include view/custom.kv
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import os.path os.path
+
+WindowManager:
+    transition: NoTransition()
+    id: screen_manager
+
+    #NPO Windows
+
+    NpoFileWindow:
+        id: npo_fifth_screen
+        name: "file_npo"
+        manager: screen_manager
+    NpoWindow:
+        id: first_screen
+        manager: screen_manager
+    NpoCreateWindow:
+        id: npo_second_screen
+        manager: screen_manager
+    NpoDeleteWindow:
+        id: npo_third_screen
+        manager: screen_manager
+    NpoUpdateWindow:
+        id: npo_fourth_screen
+        manager: screen_manager
+
 #: import platform sys.platform
 
 <Button>
@@ -132,7 +160,7 @@
 
         Label:
             id: name_label
-            text: "Select Database" if root.action != "grants" else "Select Download Location"
+            text: "Select Database" if root.action == "grants" else "Select Download Location"
             text_size: (root.width, None)
             size_hint: (self.width, None)
             size: root.width, root.height/24
@@ -362,6 +390,7 @@
 
     Label:
         id: name_label
+        text: "You pressed the button"
         size_hint: 0.6, 0.2
         text_size: self.width, None
         pos_hint: {"x":0.2, "top":1}
@@ -393,8 +422,8 @@
             id: cancel_button
             background_color: (0.75,0,0,1)
             color: 1,1,1,1
-            size_hint: 0, 0.2
-            pos_hint: {"x":0.2, "y":0.1}
+            size_hint: 0.8, 0.2
+            pos_hint: {"x":0.3, "y":0.1}
             text: "Cancel"
             on_release:
                 root.close_pop()
