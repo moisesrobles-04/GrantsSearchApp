@@ -1,3 +1,8 @@
+"""
+Created by moisesrobles-04
+November 13, 2023
+"""
+
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -91,6 +96,7 @@ class NpoFileWindow(Screen):
                     f.close()
                     self.ids.path_id.text = f'The download path is {path[0]}'
 
+    # Closing file search window
     def close_window(self, *args):
         if self.reenter:
             if type(self.clock_var) != str:
@@ -109,6 +115,7 @@ class GrantsApp(App):
 
 kv = Builder.load_file('view/grants.kv')
 
+# If Mac, make window smaller
 if platform == 'darwin':
     Window.size = (700, 700)
 else:
