@@ -150,7 +150,8 @@ class NpoUpdateWindow(Screen):
             text_size = (450,0)
         else:
             font_size = 14
-            width = 455
+            # width = 455
+            width = self.ids.boxes.width
             height = 35
             padding = 15
             text_size = (310,0)

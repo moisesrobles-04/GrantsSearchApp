@@ -259,9 +259,9 @@ WindowManager:
         GridLayout:
             id: boxes
             cols: 4
-            padding: 2
+            pos_hint: {"x":0.05, "y":0}
             size_hint_x: None
-            width: 1300 if platform == 'darwin' else 700
+            width: 1300 if platform == 'darwin' else root.width/1.2
             size_hint_y: None
             height: 900 if platform == 'darwin' else 480
             spacing: 10 if platform == 'darwin' else 2
