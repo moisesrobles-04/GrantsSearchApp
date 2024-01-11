@@ -1,0 +1,12 @@
+update grants set closeddate = (substr(closeddate, 7, 4) || '-' || substr(closeddate, 4, 2) || '-' || substr(closeddate, 1, 2) )
+where closeddate like '%/%';
+
+update grants set closeddate = '2099-01-01'
+where closeddate like '';
+
+select * from grants where closeddate like '';
+
+update grants set posteddate = (substr(closeddate, 7, 4) || '-' || substr(closeddate, 4, 2) || '-' || substr(closeddate, 1, 2) )
+where grants.posteddate like '%/%';
+
+select * from grants where grants.posteddate like '%/%';

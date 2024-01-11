@@ -1,0 +1,16 @@
+g_id,o_number,o_title,agency,status,posteddate,closeddate,instrument,category,matching,awardceiling,awardfloor
+
+161,20240111-PF,Sustaining Cultural Heritage Collections,NEH,Posted,2023-10-30,2024-01-12,Grant,"Arts (see ""Cultural Affairs"" in CFDA)",No,350000,1
+
+217,20240214-RAI,Humanities Research Centers on Artificial Intelligence,NEH,Posted,2023-10-24,2024-02-14,Grant,"Arts (see ""Cultural Affairs"" in CFDA)",No,500000,1
+
+954,2024NEA03LFTP,"NEA Literature Fellowships: Translation Projects, FY2025",NEA,Posted,2023-07-19,2024-01-18,Grant,"Arts (see ""Cultural Affairs"" in CFDA)",No,25000,10000
+
+1004,NLG-LIBRARIES-FY24,National Leadership Grants for Libraries (2024),IMLS,Posted,2023-07-07,2024-03-20,Grant,"Arts (see ""Cultural Affairs"" in CFDA)
+
+Humanities (see ""Cultural Affairs"" in CFDA)",Yes,1000000,50000
+
+1005,LB21-FY24,Laura Bush 21st Century Librarian Program (2024),IMLS,Posted,2023-07-07,2024-03-20,Grant,"Arts (see ""Cultural Affairs"" in CFDA)
+
+Humanities (see ""Cultural Affairs"" in CFDA)",Yes,1000000,50000
+

@@ -1,3 +1,31 @@
+#: include view/npo.kv
+#: include view/custom.kv
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+#: import os.path os.path
+
+WindowManager:
+    transition: NoTransition()
+    id: screen_manager
+
+    #NPO Windows
+
+    NpoFileWindow:
+        id: npo_fifth_screen
+        name: "file_npo"
+        manager: screen_manager
+    NpoWindow:
+        id: first_screen
+        manager: screen_manager
+    NpoCreateWindow:
+        id: npo_second_screen
+        manager: screen_manager
+    NpoDeleteWindow:
+        id: npo_third_screen
+        manager: screen_manager
+    NpoUpdateWindow:
+        id: npo_fourth_screen
+        manager: screen_manager
+
 #: import platform sys.platform
 
 <Button>
@@ -5,7 +33,7 @@
     background_normal: ''
     color: 0, 0.75, 0, 1
     halign: "center"
-    #background_color: (0,0.75,0,1)
+    background_color: (0.90,0.90,1,1)
 
 <Label>
     font_size: 28
@@ -174,7 +202,7 @@
                 size_hint: (0.2,0.2)
                 font_size: 22
                 background_color: (1, 1, 1, 1)
-                text: "Select Folder"
+                text: "Select Folder" if root.action == "grants" else "Select database file"
                 color: (0,0,0,1)
                 on_press:
                     root.selected(file.selection)
@@ -231,9 +259,9 @@
         GridLayout:
             id: boxes
             cols: 4
-            padding: 2
+            pos_hint: {"x":0.05, "y":0}
             size_hint_x: None
-            width: 1300 if platform == 'darwin' else 700
+            width: 1300 if platform == 'darwin' else root.width/1.2
             size_hint_y: None
             height: 900 if platform == 'darwin' else 480
             spacing: 10 if platform == 'darwin' else 2
@@ -360,26 +388,20 @@
             size: self.size
             pos: self.pos
 
-    Label:
-        id: name_label
-        size_hint: 0.6, 0.2
-        text_size: self.width, None
-        pos_hint: {"x":0.2, "top":1}
-
     GridLayout:
         cols: 2
         size_hint: None, None
         pos_hint: {"x":0, "y":0}
-        width: 620
+        width: root.width
         height: 80
-        spacing: 10
-        padding: 5
+        spacing: 15
+        padding: 10
 
         Button:
             id: confirm_button
             color: 0,0.5,0,1
             text: "Confirm"
-            size_hint: 0.9, 0.2
+            size_hint: 0.8, 0.2
             pos_hint: {"x":0.1, "y":0.1}
             on_release:
                 if root.npo_name != "None": root.crud_action(root.npo_name)
@@ -393,8 +415,8 @@
             id: cancel_button
             background_color: (0.75,0,0,1)
             color: 1,1,1,1
-            size_hint: 0, 0.2
-            pos_hint: {"x":0.2, "y":0.1}
+            size_hint: 0.8, 0.2
+            pos_hint: {"x":0.1, "y":0.1}
             text: "Cancel"
             on_release:
                 root.close_pop()

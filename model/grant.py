@@ -106,7 +106,7 @@ class grantDAO():
     def getGrants_byNPOname(self, name):
         try:
             cur = self.db.connection.cursor()
-            query = """Select g_id, o_number, o_title, agency, status, posteddate,
+            query = """Select distinct g_id, o_number, o_title, agency, status, posteddate,
                         closeddate, instrument, g.category, matching, awardceiling, awardfloor
                         From (NPO Natural inner join npocategory natural inner join categories) as N,
                             grants as g
@@ -136,7 +136,7 @@ class grantDAO():
     def getGrants_byNPOId(self, n_id):
         try:
             cur = self.db.connection.cursor()
-            query = """Select g_id, o_number, o_title, agency, status, posteddate,
+            query = """Select distinct g_id, o_number, o_title, agency, status, posteddate,
                         closeddate, instrument, g.category, matching, awardceiling, awardfloor
                         From (NPO Natural inner join npocategory natural inner join categories) as N,
                             grants as g
