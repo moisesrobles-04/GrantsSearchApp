@@ -1,4 +1,5 @@
 import csv
+import datetime
 import json
 
 from selenium import webdriver
@@ -23,18 +24,18 @@ def grant_scrapper():
         titles_list = []
         driver.get(link)
         wait = WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table")))
+            EC.presence_of_element_located((By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table")))
 
         dropdown_select(driver, -1)
 
         wait = WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table")))
+            EC.presence_of_element_located((By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table")))
         time.sleep(1)
 
         page_length = driver.find_element(By.XPATH,
-                                          "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/thead/tr[1]/th/nav/ul/li[6]/a").text
+                                          "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table/thead/tr[1]/th/nav/ul/li[6]/a").text
 
-        titles = driver.find_elements(By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/thead/tr[2]/th")
+        titles = driver.find_elements(By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table/thead/tr[2]/th")
 
         for i in titles:
             if i.text == '':
@@ -54,13 +55,13 @@ def grant_scrapper():
 
         for i in range(0, size):
             # Number of pages to skip
-            if i<13:
-                skip_page(driver, i)
-                time.sleep(2)
-                continue
+            # if i<13:
+            #     skip_page(driver, i)
+            #     time.sleep(2)
+            #     continue
 
             count = 1
-            cell = driver.find_elements(By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tbody/tr/td")
+            cell = driver.find_elements(By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table/tbody/tr/td")
             cell_tostring = []
             for elem in cell:
                 # check if element is closed date, if it is select by innerHTML
@@ -87,7 +88,7 @@ def grant_scrapper():
 
                     else:
                         send = driver.find_element(By.XPATH,
-                                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tbody/tr["
+                                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table/tbody/tr["
                                                    + str(index) + "]/td[1]/a")
                         send.send_keys(Keys.ENTER)
 
@@ -137,7 +138,7 @@ def grant_scrapper():
                         time.sleep(1)
                         wait = WebDriverWait(driver, 30).until(
                             EC.presence_of_element_located(
-                                (By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table")))
+                                (By.XPATH, "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table")))
                         dropdown_select(driver, i)
 
                         index += 1
@@ -175,16 +176,16 @@ def aux_str(money):
 def skip_page(driver, num):
     if num == 0:
         skip = driver.find_element(By.XPATH,
-                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tfoot/tr/td/nav/ul/li[2]/a")
+                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table/tfoot/tr/td/nav/ul/li[2]/a")
     elif num == 1:
         skip = driver.find_element(By.XPATH,
-                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tfoot/tr/td/nav/ul/li[4]/a")
+                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table/tfoot/tr/td/nav/ul/li[4]/a")
     elif num == 2:
         skip = driver.find_element(By.XPATH,
-                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tfoot/tr/td/nav/ul/li[5]/a")
+                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table/tfoot/tr/td/nav/ul/li[5]/a")
     else:
         skip = driver.find_element(By.XPATH,
-                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/table/tfoot/tr/td/nav/ul/li[6]/a")
+                                   "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[3]/table/tfoot/tr/td/nav/ul/li[6]/a")
 
     skip.send_keys(Keys.ENTER)
     time.sleep(0.5)
@@ -194,7 +195,7 @@ def dropdown_select(driver, num):
     dropdown = Select(driver.find_element(By.XPATH, "//*[@id='dateRange']"))
     dropdown.select_by_index(5)
     update_data = driver.find_element(By.XPATH,
-                                      '//*[@id="__nuxt"]/div[4]/div/div/div/div[2]/div[2]/div[2]/div[2]/button')
+                                      "//*[@id='__nuxt']/div[4]/div/div/div/div[2]/div[2]/div[2]/div[2]/button")
     update_data.send_keys(Keys.ENTER)
     for i in range(num):
         if i >= 0:
@@ -202,7 +203,7 @@ def dropdown_select(driver, num):
             time.sleep(1)
 
 if __name__ == "__main__":
-    with open("./data/test.csv", "a") as funds:
+    with open("Grants_data_" + str(datetime.date.today()) + ".csv", "w") as funds:
         writer = csv.writer(funds)
         result = grant_scrapper()
         writer.writerows(result)
