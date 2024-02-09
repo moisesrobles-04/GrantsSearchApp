@@ -6,16 +6,16 @@ import datetime
 
 
 def copy_db():
-    conn = sqlite3.connect("C:\\Users\\Moises_Robles04\\PycharmProjects\\grantsWebScrapper\\data\\grants.db")
-    path = "C:\\Users\\Moises_Robles04\\PycharmProjects\\grantsWebScrapper\\data\\backups\\grants_" + str(
+    conn = sqlite3.connect("C:\\Users\\Moises_Robles04\\Documents\\Grants App\\data\\grants.db")
+    path = "C:\\Users\\Moises_Robles04\\Documents\\Grants App\\data\\backups\\grants_" + str(
         datetime.datetime.today().date()) + ".db"
     new_path = path.replace("-", "_")
     if not os.path.isfile(new_path):
-        shutil.copyfile("C:\\Users\\Moises_Robles04\\PycharmProjects\\grantsWebScrapper\\data\\grants.db", new_path)
+        shutil.copyfile("C:\\Users\\Moises_Robles04\\Documents\\Grants App\\data\\grants.db", new_path)
 
 
 def remove_old_data():
-    conn = sqlite3.connect("C:\\Users\\Moises_Robles04\\PycharmProjects\\grantsWebScrapper\\data\\grants.db")
+    conn = sqlite3.connect("C:\\Users\\Moises_Robles04\\Documents\\Grants App\\data\\grants.db")
     cur = conn.cursor()
     query = "DELETE FROM grants WHERE closeddate<Date(current_date)"
     cur.execute(query)
@@ -29,10 +29,10 @@ def remove_old_data():
 if __name__ == "__main__":
     l = []
     copy_db()
-    conn = sqlite3.connect("C:\\Users\\Moises_Robles04\\PycharmProjects\\grantsWebScrapper\\data\\grants.db")
+    conn = sqlite3.connect("C:\\Users\\Moises_Robles04\\Documents\\Grants App\\data\\grants.db")
     cur = conn.cursor()
 
-    with open("Grants_data_2024-01-10.csv", "r", encoding='windows-1252') as f:
+    with open("Grants_data_2024-02-09.csv", "r", encoding='windows-1252') as f:
         read = csv.reader(f)
         read.__next__()
         for i in read:
