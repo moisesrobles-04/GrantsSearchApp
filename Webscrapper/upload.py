@@ -32,7 +32,7 @@ if __name__ == "__main__":
     conn = sqlite3.connect("C:\\Users\\Moises_Robles04\\PycharmProjects\\grantsWebScrapper\\data\\grants.db")
     cur = conn.cursor()
 
-    with open("Grants_data_2024-01-10.csv", "r", encoding='windows-1252') as f:
+    with open("Grants_data_" + str(datetime.date.today()) + ".csv", "r", encoding='utf-8') as f:
         read = csv.reader(f)
         read.__next__()
         for i in read:
