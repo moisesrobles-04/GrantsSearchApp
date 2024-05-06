@@ -55,9 +55,9 @@ def grant_scrapper():
 
         for i in range(0, size):
             # Number of pages to skip
-            # if i<13:
+            # if i<5:
             #     skip_page(driver, i)
-            #     time.sleep(2)
+            #     time.sleep(1)
             #     continue
 
             count = 1

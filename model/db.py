@@ -4,7 +4,7 @@ import sqlite3
 class Database:
     def __init__(self):
         try:
-            with open("data/database_loc.csv", "r") as f:
+            with open("./database_loc.csv", "r") as f:
                 r = csv.reader(f)
                 path = r.__next__()
                 f.close()

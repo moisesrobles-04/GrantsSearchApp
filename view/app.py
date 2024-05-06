@@ -29,7 +29,7 @@ class NpoFileWindow(Screen):
     def on_pre_enter(self, *args):
         # If it is first time entering app check if database file path exist
         if not self.reenter:
-            grants_exist = os.path.isfile("data/database_loc.csv")
+            grants_exist = os.path.isfile("./database_loc.csv")
             if not grants_exist:
                 self.action = ""
 
@@ -49,10 +49,10 @@ class NpoFileWindow(Screen):
         finally:
             if self.path != "":
                 if self.action != "grants":
-                    path_name = "data/database_loc.csv"
+                    path_name = "./database_loc.csv"
 
                 else:
-                    path_name = "data/download_path.csv"
+                    path_name = "./download_path.csv"
 
                 with open(path_name, "w") as file:
                     w = csv.writer(file)
@@ -60,7 +60,7 @@ class NpoFileWindow(Screen):
                     file.close()
 
                 # When opened for the first time download path will be the same as db path
-                path_name = "data/download_path.csv"
+                path_name = "./download_path.csv"
                 exist = os.path.isfile(path_name)
                 if not exist:
                     temp_path = self.path.split("grants.db")
@@ -76,21 +76,21 @@ class NpoFileWindow(Screen):
     # Name path's label
     def getpath(self):
         if self.action != "grants":
-            grants_exist = os.path.isfile("data/database_loc.csv")
+            grants_exist = os.path.isfile("./database_loc.csv")
             if not grants_exist:
                 self.ids.path_id.text = "Database path has not been selected"
             else:
-                with open("data/database_loc.csv", 'r') as f:
+                with open("./database_loc.csv", 'r') as f:
                     read = csv.reader(f)
                     path = read.__next__()
                     f.close()
                     self.ids.path_id.text = f'The database path is {path[0]}'
         else:
-            download_exist = os.path.isfile("data/download_path.csv")
+            download_exist = os.path.isfile("./download_path.csv")
             if not download_exist:
                 self.ids.path_id.text = 'No download path selected'
             else:
-                with open("data/download_path.csv", 'r') as f:
+                with open("./download_path.csv", 'r') as f:
                     read = csv.reader(f)
                     path = read.__next__()
                     f.close()
@@ -101,7 +101,7 @@ class NpoFileWindow(Screen):
         if self.reenter:
             if type(self.clock_var) != str:
                 self.clock_var.cancel()
-        if os.path.isfile("data/database_loc.csv"):
+        if os.path.isfile("./database_loc.csv"):
             self.manager.current = "first"
             self.action = ""
             self.reenter = True
